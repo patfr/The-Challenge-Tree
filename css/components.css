@@ -40,7 +40,7 @@
 	padding-right: 5px;
 	height: 75px;
 	background-color: #bf8f8f;
-	border: 4px solid;
+	border: 3px solid;
 	border-radius: 4px;
 	border-color: rgba(0, 0, 0, 0.125);
 	color: rgba(0, 0, 0, 0.5);
@@ -54,22 +54,40 @@
 
 	height: 75px;
 	background-color: #77bf5f;
-	border: 4px solid;
+	border: 3px solid;
 	border-radius: 4px;
 	border-color: rgba(0, 0, 0, 0.125);
 	color: rgba(0, 0, 0, 0.5);
 }
 
+table {
+	grid-column-gap: 0px;
+	grid-row-gap: 0px;
+}
+
+table>tr:first-child>.milestone, table>tr:first-child>.milestoneDone {
+	border-radius: 4px 4px 0 0;
+}
+
+table>tr:last-child>.milestone, table>tr:last-child>.milestoneDone {
+	border-radius: 0 0 4px 4px;
+}
+
+table>tr:only-child>.milestone {
+	border-radius: 4px;
+}
+
 .challenge {
 	background-color: #bf8f8f;
 	position: relative;
-	border: 4px solid;
+	border: 3px solid;
 	border-color: rgba(0, 0, 0, 0.125);
 	color: rgba(0, 0, 0, 0.5);
 	width: 300px;
-	height: 300px;
+	height: fit-content;
+	padding-bottom: 10px;
 	font-size: 15px;
-	border-radius: 33.33%;
+	border-radius: 8px;
 }
 
 .challenge.done {
@@ -150,7 +168,7 @@
 	height: 50px;
 	width: 120px;
 	background: var(--points);
-	border-radius: 50%;
+	border-radius: 4px;
 	border: 2px solid;
 	border-color: rgba(0, 0, 0, 0.125);
 	font-size: 10px;

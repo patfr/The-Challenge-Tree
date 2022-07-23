@@ -1,79 +1,84 @@
 let modInfo = {
-	name: "The ??? Tree",
-	id: "mymod",
-	author: "nobody",
-	pointsName: "points",
+	name: "The Challenge Tree",
+	id: "TheChallengeTreePatfr",
+	author: "patfr",
+	pointsName: "ω",
 	modFiles: ["layers.js", "tree.js"],
 
-	discordName: "",
-	discordLink: "",
-	initialStartPoints: new Decimal (10), // Used for hard resets and new players
-	offlineLimit: 1,  // In hours
+	discordName: "Patfr",
+	discordLink: "https://discord.gg/7ahtMyv5hX",
+	initialStartPoints: new Decimal (0),
+	offlineLimit: 0,
 }
 
-// Set your version in num and name
 let VERSION = {
-	num: "0.0",
-	name: "Literally nothing",
+	num: "0.1",
+	name: "Challenging?",
 }
 
-let changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.0</h3><br>
-		- Added things.<br>
-		- Added stuff.`
+function versionText(v, cs) {
+	let ver = `<h3 style='color:#eeee00'>${v}</h3><br><br>`
+	for (let i = 0; i < cs.length; i++) {
+		ver += `${cs[i]}.<br>`
+	}
+	return ver
+}
 
-let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
+let changelog = `
+<h1 style='color:#eeee00'>Endgame:</h1><br><br>
+	100,000 α<br><br>
+<h1 style='color:#ee0000'>Changelog:</h1><br><br>
+	${versionText("v0.1 - Challenging", ["Added a layer", "Added two challenges", "Added two milestones"])}
+`
 
-// If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
-// (The ones here are examples, all official functions are already taken care of)
+let winText = `Congratulations! You have completed the challenge that this tree presented before you, but for now...`
+
 var doNotCallTheseFunctionsEveryTick = ["blowUpEverything"]
 
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)
 }
 
-// Determines if it should show points/sec
 function canGenPoints(){
-	return true
+	let gain = false
+	if (inChallenge("alpha", 11)) gain = true
+	if (hasMilestone("alpha", 1)) gain = true
+	return gain
 }
 
-// Calculate points/sec!
 function getPointGen() {
 	if(!canGenPoints())
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
+	gain = gain.mul(tmp.alpha.effect)
+	if (inChallenge("alpha", 21)) gain = gain.sqrt()
 	return gain
 }
 
-// You can add non-layer related variables that should to into "player" and be saved here, along with default values
 function addedPlayerData() { return {
+	alphaBase: new Decimal(0),
+	alphaShow: false,
 }}
 
-// Display extra things at the top of the page
 var displayThings = [
+	function() {
+		if (player.keepGoing)
+			return "<h4 style='color:#00aaff'>You are past endgame.<br>The game may not be balanced beyond this point.</h4>"
+	}
 ]
 
-// Determines when the game "ends"
 function isEndgame() {
-	return player.points.gte(new Decimal("e280000000"))
+	return player.alpha.points.gte(1e5)
 }
 
-
-
-// Less important things beyond this point!
-
-// Style for the background, can be a function
 var backgroundStyle = {
 
 }
 
-// You can change this if you have things that can be messed up by long tick lengths
 function maxTickLength() {
-	return(3600) // Default is 1 hour which is just arbitrarily large
+	return(3600)
 }
 
-// Use this if you need to undo inflation from an older version. If the version is older than the version that fixed the issue,
-// you can cap their current resources with this.
 function fixOldSave(oldVersion){
 }

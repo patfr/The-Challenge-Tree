@@ -8,16 +8,20 @@ var layoutInfo = {
     
 }
 
-
-// A "ghost" layer which offsets other layers in the tree
-addNode("blank", {
-    layerShown: "ghost",
-}, 
-)
+addNode("blank", { layerShown: "ghost", position: 0, row: 3 })
 
 
 addLayer("tree-tab", {
-    tabFormat: [["tree", function() {return (layoutInfo.treeLayout ? layoutInfo.treeLayout : TREE_LAYERS)}]],
+    tabFormat: {
+        Layers: {
+            embedLayer: "l",
+            buttonStyle: { "border-color": "#43e06d" },
+        },
+        /*Achivements: {
+            embedLayer: "a",
+            buttonStyle: { "border-color": "#ffff00" },
+        },*/
+    },
     previousTab: "",
     leftTab: true,
 })
