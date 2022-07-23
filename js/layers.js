@@ -27,7 +27,10 @@ addLayer("alpha", {
         Challenges: {
             content: [
                 alphaHave,
-                ["challenges", [1]],
+                function() {
+                    if (tmp[this.layer].challenges[12].unlocked) return ["row", [["challenge", 11], "blank", ["challenge", 12]]]
+                    return ["challenges", [1]]
+                },
                 "blank",
                 ["challenges", [2]],
             ],
@@ -63,8 +66,33 @@ addLayer("alpha", {
                 tmp[this.layer].doReset(this.layer)
                 player.alphaShow = true
             },
-            style: { "width": "200px" },
+            style: { "width": "200px", "height": "300px" },
         },
+        12: {
+            name: "Alpha III",
+            canComplete() { return false },
+            fullDisplay() {
+                return `
+                Alpha effect is x1<br><br><br>
+                Reward: Multiplies ω gain<br><br>
+                Total ω gained: ${format(player.alphaIII)} ω
+                Effect: x${format(this.rewardEffect())} ω
+                `
+            },
+            rewardEffect() {
+                return player.alphaIII.max(1).log2().max(1)
+            },
+            onEnter() {
+                tmp[this.layer].doReset(this.layer)
+            },
+            onExit() {
+                player.alphaIII = player.alphaIII.add(player.points)
+                tmp[this.layer].doReset(this.layer)
+            },
+            style: { "width": "200px", "height": "300px" },
+            unlocked() { return hasMilestone(this.layer, 2) },
+        },
+
         21: {
             name: "Alpha II",
             completionLimit: 5,
@@ -72,7 +100,7 @@ addLayer("alpha", {
             fullDisplay() {
                 return `
                 Completions: ${challengeCompletions(this.layer, this.id)}/${this.completionLimit}<br><br>
-                Square root ω gain<br><br>
+                Square root α and ω gain<br><br>
                 Goal: ${format(this.goal())} ω<br><br>
                 Reward: Each completion doubles α gain<br><br>
                 Effect: x${format(this.rewardEffect())} α
@@ -85,6 +113,7 @@ addLayer("alpha", {
                 return new Decimal(5).mul(challengeCompletions(this.layer, this.id)).add(5)
             },
             onEnter() {
+                player[this.layer].points = new Decimal(0)
                 tmp[this.layer].doReset(this.layer)
             },
             unlocked() { return hasMilestone(this.layer, 0) },
@@ -102,17 +131,28 @@ addLayer("alpha", {
             done() { return inChallenge(this.layer, 11) && player.points.gte(100) },
             unlocked() { return hasMilestone(this.layer, 0) }
         },
+        2: {
+            requirementDescription: "5 Alpha II completions (3)",
+            effectDescription: "Unlock another challenge and Alpha effect log3 becomes a log2",
+            done() { return challengeCompletions(this.layer, 21) >= 5 },
+            unlocked() { return hasMilestone(this.layer, 1) }
+        },
     },
     alphaGain() {
         let base = challengeEffect(this.layer, 11)
         base = base.mul(challengeEffect(this.layer, 21))
+        if (inChallenge(this.layer, 21)) base = base.sqrt()
         return base
     },
     update(delta) {
         player[this.layer].points = player[this.layer].points.add(tmp[this.layer].alphaGain.mul(delta))
     },
     effect() {
-        return player[this.layer].points.max(1).log(3).add(1)
+        let log = 3
+        if (hasMilestone(this.layer, 2)) log = 2
+        let eff = player[this.layer].points.max(1).log(log).add(1)
+        if (inChallenge(this.layer, 12)) eff = new Decimal(1)
+        return eff
     },
     doReset(layer) {
         let keep = []
@@ -129,18 +169,64 @@ addLayer("alpha", {
 addLayer("l", {
     color: "#000000",
     tabFormat: {
-        "α": {
+        Alpha: {
             embedLayer: "alpha",
-            buttonStyle: { "border": "2px solid #ffffff", "border-radius": "1px" },
+            buttonStyle: { "border-color": "#ffffff", "border-width": "2px", "border-radius": "1px" },
         },
     },
     doReset() {},
 })
 
 addLayer("a", {
-    color: "#000000",
-    tabFormat: [
-        ["display-text", ":O"],
-    ],
+    color: "#ffff00",
+    tabFormat: {
+        Alpha: {
+            content: [
+                function() {
+                    let rows = [1]
+                    //if (hasAchievement(this.layer, 17)) rows.push(2)
+                    return ["achievements", rows]
+                },
+            ],
+            buttonStyle: { "border-color": "#ffffff", "border-width": "2px", "border-radius": "1px" },
+        },
+    },
+    achievements: {
+        11: {
+            name: "Wait what?",
+            tooltip: "Exit Alpha I",
+            done() { return player.alphaShow },
+        },
+        12: {
+            name: "I thought this was challenges only?",
+            tooltip: "Get the 1st Alpha milestone",
+            done() { return hasMilestone("alpha", 0) },
+        },
+        13: {
+            name: "Ez",
+            tooltip: "Get the 1st Alpha II completion",
+            done() { return challengeCompletions("alpha", 21) >= 1 },
+        },
+        14: {
+            name: "Slower?",
+            tooltip: "Get the 3rd Alpha II completion",
+            done() { return challengeCompletions("alpha", 21) >= 3 },
+        },
+        15: {
+            name: "Was that all?",
+            tooltip: "Get the 5th Alpha II completion",
+            done() { return challengeCompletions("alpha", 21) >= 5 },
+        },
+        16: {
+            name: "No effect!",
+            tooltip: "Enter Alpha III",
+            done() { return inChallenge("alpha", 12) },
+        },
+        17: {
+            name: "Points",
+            tooltip: "Get 150 ω/s",
+            done() { return tmp.pointGen.gte(150) },
+        },
+    },
     doReset() {},
 })

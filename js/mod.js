@@ -12,23 +12,40 @@ let modInfo = {
 }
 
 let VERSION = {
-	num: "0.1",
-	name: "Challenging?",
-}
-
-function versionText(v, cs) {
-	let ver = `<h3 style='color:#eeee00'>${v}</h3><br><br>`
-	for (let i = 0; i < cs.length; i++) {
-		ver += `${cs[i]}.<br>`
-	}
-	return ver
+	num: "0.2",
+	name: "Goals in life?",
 }
 
 let changelog = `
-<h1 style='color:#eeee00'>Endgame:</h1><br><br>
-	100,000 α<br><br>
-<h1 style='color:#ee0000'>Changelog:</h1><br><br>
-	${versionText("v0.1 - Challenging", ["Added a layer", "Added two challenges", "Added two milestones"])}
+	<h1 style='color:#ee0000;'>Changelog</h1><br><br><br><br>
+		<details>
+			<summary><h2 style='color:#eeee00'>Endgame - Spoilers - v0.2</h2></summary>
+			<ul>
+				<li class="Endgame">150 ω/s</li>
+			</ul>
+		</details>
+		<br><br><br>
+		<details open>
+			<summary><h2 style='color:#add2ed'>v0.2 - Goals in life?</h2></summary>
+			<ul>
+				<li class="Added">A challenge</li>
+				<li class="Added">A milestone</li>
+				<li class="Added">7 Achievements</li>
+			</ul>
+			<ul>
+				<li class="Changed">Alpha II to now also reset Alpha points on enter</li>
+				<li class="Changed">Alpha II to now also square root Alpha gain</li>
+				<li class="Changed">Changelog</li>
+			</ul>
+		</details>
+		<details>
+			<summary><h2 style='color:#f7922d'>v0.1 - Challenging?</h2></summary>
+			<ul>
+				<li class="Added">A layer</li>
+				<li class="Added">Two milestones</li>
+				<li class="Added">Two challenges</li>
+			</ul>
+		</details>
 `
 
 let winText = `Congratulations! You have completed the challenge that this tree presented before you, but for now...`
@@ -52,12 +69,14 @@ function getPointGen() {
 
 	let gain = new Decimal(1)
 	gain = gain.mul(tmp.alpha.effect)
+	gain = gain.mul(challengeEffect("alpha", 12))
 	if (inChallenge("alpha", 21)) gain = gain.sqrt()
 	return gain
 }
 
 function addedPlayerData() { return {
 	alphaBase: new Decimal(0),
+	alphaIII: new Decimal(0),
 	alphaShow: false,
 }}
 
@@ -69,7 +88,7 @@ var displayThings = [
 ]
 
 function isEndgame() {
-	return player.alpha.points.gte(1e5)
+	return tmp.pointGen.gte(150)
 }
 
 var backgroundStyle = {

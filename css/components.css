@@ -11,13 +11,49 @@
 .achievement {
 	height: 90px;
 	width: 90px;
-	border-radius: 25%;
 	border: 2px solid;
 	border-color: rgba(0, 0, 0, 0.125);
 	font-size: 10px;
 	color: white;
 	text-shadow: 0 0 2px #000000;
 }
+
+.upgTable>.upgRow:first-of-type>div:first-child>.upgAlign>.achievement {
+	border-radius: 8px 0 0 0;
+}
+
+.upgTable>.upgRow:first-of-type>div:last-child>.upgAlign>.achievement {
+	border-radius: 0 8px 0 0;
+}
+
+.upgTable>.upgRow:first-of-type>div:only-child>.upgAlign>.achievement {
+	border-radius: 8px;
+}
+
+.upgTable>.upgRow:last-of-type>div:first-child>.upgAlign>.achievement {
+	border-radius: 0 0 0 8px;
+}
+
+.upgTable>.upgRow:last-of-type>div:last-child>.upgAlign>.achievement {
+	border-radius: 0 0 8px 0;
+}
+
+.upgTable>.upgRow:last-of-type>div:only-child>.upgAlign>.achievement {
+	border-radius: 8px;
+}
+
+.upgTable>.upgRow:only-of-type>div:first-child>.upgAlign>.achievement {
+	border-radius: 8px 0 0 8px;
+}
+
+.upgTable>.upgRow:only-of-type>div:last-child>.upgAlign>.achievement {
+	border-radius: 0 8px 8px 0;
+}
+
+.upgTable>.upgRow:only-of-type>div:only-child>.upgAlign>.achievement {
+	border-radius: 8px 8px;
+}
+
 .achievement:hover {
 	box-shadow: 0 0 10px var(--points);
 	z-index: 7;
@@ -51,30 +87,12 @@
 	min-width: 120px;
 	padding-left: 5px;
 	padding-right: 5px;
-
 	height: 75px;
 	background-color: #77bf5f;
 	border: 3px solid;
 	border-radius: 4px;
 	border-color: rgba(0, 0, 0, 0.125);
 	color: rgba(0, 0, 0, 0.5);
-}
-
-table {
-	grid-column-gap: 0px;
-	grid-row-gap: 0px;
-}
-
-table>tr:first-child>.milestone, table>tr:first-child>.milestoneDone {
-	border-radius: 4px 4px 0 0;
-}
-
-table>tr:last-child>.milestone, table>tr:last-child>.milestoneDone {
-	border-radius: 0 0 4px 4px;
-}
-
-table>tr:only-child>.milestone {
-	border-radius: 4px;
 }
 
 .challenge {

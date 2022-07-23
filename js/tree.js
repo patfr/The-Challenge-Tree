@@ -17,10 +17,10 @@ addLayer("tree-tab", {
             embedLayer: "l",
             buttonStyle: { "border-color": "#43e06d" },
         },
-        /*Achivements: {
+        Achivements: {
             embedLayer: "a",
             buttonStyle: { "border-color": "#ffff00" },
-        },*/
+        },
     },
     previousTab: "",
     leftTab: true,
