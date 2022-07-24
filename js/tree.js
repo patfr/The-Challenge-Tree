@@ -17,7 +17,7 @@ addLayer("tree-tab", {
             embedLayer: "l",
             buttonStyle: { "border-color": "#43e06d" },
         },
-        Achivements: {
+        Achievements: {
             embedLayer: "a",
             buttonStyle: { "border-color": "#ffff00" },
         },

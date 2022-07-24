@@ -86,3 +86,9 @@ li.Changed::before {
     background: #f7922d;
     color: #171717;
 }
+
+li.Removed::before {
+    content: "Removed";
+    background: #f7634f;
+    color: #171717;
+}
