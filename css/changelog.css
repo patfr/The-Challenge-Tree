@@ -92,3 +92,9 @@ li.Removed::before {
     background: #f7634f;
     color: #171717;
 }
+
+li.Fixed::before {
+    content: "Fixed";
+    background: #31eb63;
+    color: #171717;
+}

@@ -135,7 +135,7 @@ addLayer("alpha", {
                 return base.pow(challengeCompletions(this.layer, this.id)).max(1)
             },
             goal() {
-                if (this.completionLimit() < 5) return new Decimal(5).mul(challengeCompletions(this.layer, this.id)).add(5)
+                if (challengeCompletions(this.layer, this.id) < 5) return new Decimal(5).mul(challengeCompletions(this.layer, this.id)).add(5)
                 return new Decimal(5e16)
             },
             onEnter() {

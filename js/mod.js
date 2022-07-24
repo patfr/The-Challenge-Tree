@@ -67,7 +67,7 @@ function fixOldSave(oldVersion){
 }
 
 let VERSION = {
-	num: "0.3",
+	num: "0.3.1",
 	name: "Upgrade the challenge?",
 }
 
@@ -82,6 +82,13 @@ let changelog = `
 			</ul>
 		</details>
 		<br><br><br>
+
+		<details open>
+			<summary><h2 style='color:#69f5bb'>v0.3.1 - Fix</h2></summary>
+			<ul>
+				<li class="Fixed">Fixed Alpha II having the wrong goal</li>
+			</ul>
+		</details>
 
 		<details open>
 			<summary><h2 style='color:#69f5bb'>v0.3 - Upgrade the challenge?</h2></summary>
