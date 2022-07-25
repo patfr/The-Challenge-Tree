@@ -79,7 +79,7 @@ let winText = `Congratulations! You have completed the challenge that this tree 
 let changelog = `
 	<h1 style='color:#ee0000;'>Changelog</h1><br><br><br><br>
 		<details>
-			<summary><h2 style='color:#eeee00'>Endgame - Spoilers - v0.3</h2></summary>
+			<summary><h2 style='color:#eeee00'>Endgame - Spoilers - v0.4</h2></summary>
 			<ul>
 				<li class="Endgame">1e1421 α</li>
 			</ul>
