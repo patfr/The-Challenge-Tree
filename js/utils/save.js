@@ -14,7 +14,6 @@ function startPlayerBase() {
 		notify: {},
 		versionType: modInfo.id,
 		version: VERSION.num,
-		beta: VERSION.beta,
 		timePlayed: 0,
 		keepGoing: false,
 		hasNaN: false,
@@ -303,7 +302,6 @@ function versionCheck() {
 		}
 		player.versionType = getStartPlayer().versionType;
 		player.version = VERSION.num;
-		player.beta = VERSION.beta;
 	}
 }
 var saveInterval = setInterval(function () {

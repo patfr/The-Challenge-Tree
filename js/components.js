@@ -597,6 +597,21 @@ function loadVue() {
 	`
 	})
 
+	Vue.component('version', {
+		props: ['layer', 'data'],
+		template: `
+			<div>
+				<h2 :style="{color: data.color}" v-html="data.name"></h2>
+				<details v-for="(version, iv) in data.items" :open="data.open">
+					<summary><h2 :style="{color: data.color}" v-html="version.summary"></h2></summary>
+					<ul v-for="(category, ic) in version.items">
+						<li v-for="(action, ia) in category" :class="action.type" v-html="action.description"></li>
+					</ul>
+				</details>
+			</div>
+		`
+	})
+
 	// SYSTEM COMPONENTS
 	Vue.component('node-mark', systemComponents['node-mark'])
 	Vue.component('tab-buttons', systemComponents['tab-buttons'])

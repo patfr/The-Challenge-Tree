@@ -52,11 +52,11 @@ addLayer("alpha", {
                 alphaHave,
                 function() {
                     let rows = [1]
-                    if (tmp[this.layer].upgrades[21].unlocked) rows.push(2)
+                    if (tmp[this.layer].upgrades[21].unlocked || player.beta.unlocked) rows.push(2)
                     return ["upgrades", rows]
                 },
             ],
-            unlocked() { return hasMilestone("alpha", 3) },
+            unlocked() { return hasMilestone("alpha", 3) || player.beta.unlocked },
         },
     },
     challenges: {
@@ -236,19 +236,19 @@ addLayer("alpha", {
             title: "α VI",
             description: "Alpha III effect is better",
             cost: new Decimal(1e110),
-            unlocked() { return hasUpgrade(this.layer, 15) },
+            unlocked() { return hasUpgrade(this.layer, 15) || player.beta.unlocked },
         },
         22: {
             title: "α VII",
             description: "Alpha II effect also applies to ω gain",
             cost: new Decimal(1e139),
-            unlocked() { return hasUpgrade(this.layer, 15) },
+            unlocked() { return hasUpgrade(this.layer, 15) || player.beta.unlocked },
         },
         23: {
             title: "α VIII",
             description: "Multiply ω gain by x1000 after all powers",
             cost: new Decimal("1e450"),
-            unlocked() { return hasUpgrade(this.layer, 15) },
+            unlocked() { return hasUpgrade(this.layer, 15) || player.beta.unlocked },
         },
         24: {
             title: "α IX",
@@ -259,7 +259,7 @@ addLayer("alpha", {
             currencyDisplayName: "ω",
             currencyInternalName: "points",
             currencyLocation() { return player },
-            unlocked() { return hasUpgrade(this.layer, 15) },
+            unlocked() { return hasUpgrade(this.layer, 15) || player.beta.unlocked },
         },
         25: {
             title: "α X",
@@ -267,7 +267,7 @@ addLayer("alpha", {
             effect() { return player[this.layer].points.pow(0.65).max(1).min("1e1000") },
             effectDisplay() { return `x${format(this.effect())}` },
             cost: new Decimal("5e490"),
-            unlocked() { return hasUpgrade(this.layer, 15) },
+            unlocked() { return hasUpgrade(this.layer, 15) || player.beta.unlocked },
         },
     },
     milestones: {
@@ -298,12 +298,12 @@ addLayer("alpha", {
         },
         5: {
             requirementDescription: "1e279 α (6)",
-            effectDescription: "You can complete Alpha II twice as many times and it's effect is raised by 1.1",
+            effectDescription: "You can complete Alpha II twice as many times and its effect is raised by 1.1",
             done() { return player[this.layer].points.gte(1e279) },
         },
         6: {
             requirementDescription: "1e1400 α (7)",
-            effectDescription: "Unlock a layer (Not implemented yet)",
+            effectDescription: "Unlock a layer",
             done() { return player[this.layer].points.gte("1e1400") },
         },
     },
@@ -311,6 +311,7 @@ addLayer("alpha", {
         let base = challengeEffect(this.layer, 11)
         base = base.mul(challengeEffect(this.layer, 21))
         if (hasUpgrade(this.layer, 25)) base = base.mul(upgradeEffect(this.layer, 25))
+        base = base.mul(tmp.beta.effect)
         if (inChallenge(this.layer, 21)) base = base.sqrt()
         if (inChallenge(this.layer, 22)) base = base.cbrt()
         return base
@@ -342,8 +343,124 @@ addLayer("alpha", {
             keep.push("challenges")
             keep.push("upgrades")
             layerDataReset(this.layer, keep)
+            return
+        }
+        player.alphaBase = new Decimal(0)
+        player.alphaIII = new Decimal(0)
+        if (layer == "beta") {
+            let milestoneKeep = 0
+            if (hasMilestone("beta", 0)) milestoneKeep = 1
+            if (hasMilestone("beta", 2)) milestoneKeep = 2
+            if (hasMilestone("beta", 3)) milestoneKeep = 3
+            if (hasMilestone("beta", 4)) milestoneKeep = 5
+            if (hasMilestone("beta", 6)) milestoneKeep = 7
+            let upgradeKeep = 0
+            if (hasMilestone("beta", 1)) upgradeKeep = Math.floor(player.beta.times / 2)
+
+            let alphaII = challengeCompletions(this.layer, 21)
+            let alphaIV = challengeCompletions(this.layer, 22)
+            let alphaV = challengeCompletions(this.layer, 31)
+
+            keep.push("milestones")
+            keep.push("upgrades")
+            layerDataReset(this.layer, keep)
+
+            player[this.layer].milestones = player[this.layer].milestones.slice(0, milestoneKeep)
+            player[this.layer].upgrades = player[this.layer].upgrades.slice(0, upgradeKeep)
+            if (hasMilestone("beta", 3)) player[this.layer].challenges[21] = Math.min(alphaII, player.beta.times)
+            if (hasMilestone("beta", 4)) player[this.layer].challenges[22] = Math.min(alphaIV, 1)
+            if (hasMilestone("beta", 5)) player[this.layer].challenges[31] = Math.min(alphaV, 1)
         }
     },
+})
+
+function betaHave() {
+    return [ "column", 
+        [
+            ["display-text", `
+                You have <h2 style='color:${tmp.beta.color};text-shadow:0 0 10px ${tmp.beta.color}'>${formatWhole(player.beta.points)}</h2> β,
+                which is giving a x${format(tmp.beta.effect)} to all prior currencies after powers. Max x400
+            `],
+            ["display-text", `You have done ${formatWhole(player.beta.times)} resets`],
+            "blank",
+        ]
+    ]
+}
+
+addLayer("beta", {
+    name: "Beta",
+    symbol: "β",
+    color: "#7da6ff",
+    resource: "β",
+    type: "normal",
+    baseResource: "α",
+    baseAmount() { return player.alpha.points },
+    requires: new Decimal("1e1421"),
+    exponent: 0.001,
+    row: 1,
+    startData() { return {
+        unlocked: false,
+		points: new Decimal(0),
+        times: 0,
+    }},
+    tabFormat: {
+        Challenges: {
+            content: [
+                betaHave,
+                "prestige-button",
+            ],
+        },
+        Milestones: {
+            content: [
+                betaHave,
+                "blank",
+                "milestones",
+            ],
+        },
+    },
+    milestones: {
+        0: {
+            requirementDescription: "1 Beta reset (1)",
+            effectDescription: "Keep one Alpha milestone on reset",
+            done() { return player[this.layer].times >= 1 },
+        },
+        1: {
+            requirementDescription: "2 Beta resets (2)",
+            effectDescription: "Keep one Alpha upgrade for every 2 Beta resets on reset",
+            done() { return player[this.layer].times >= 2 },
+        },
+        2: {
+            requirementDescription: "3 Beta resets (3)",
+            effectDescription: "Keep one Alpha milestone on reset",
+            done() { return player[this.layer].times >= 3 },
+        },
+        3: {
+            requirementDescription: "5 Beta resets (4)",
+            effectDescription: "Keep one Alpha milestone and keep one Alpha II completion per reset on reset",
+            done() { return player[this.layer].times >= 5 },
+        },
+        4: {
+            requirementDescription: "7 Beta resets (5)",
+            effectDescription: "Keep two Alpha milestones and keep Alpha IV completion on reset",
+            done() { return player[this.layer].times >= 7 },
+        },
+        5: {
+            requirementDescription: "11 Beta resets (6)",
+            effectDescription: "Keep one Alpha milestone and keep Alpha V completion on reset",
+            done() { return player[this.layer].times >= 11 },
+        },
+        6: {
+            requirementDescription: "15 Beta resets (7)",
+            effectDescription: "Keep two Alpha milestones on reset",
+            done() { return player[this.layer].times >= 15 },
+        },
+    },
+    effect() {
+        return player[this.layer].best.add(1).pow(2).max(1).min(400)
+    },
+    onPrestige() {
+        player[this.layer].times += 1
+    }
 })
 
 addLayer("l", {
@@ -352,6 +469,11 @@ addLayer("l", {
         Alpha: {
             embedLayer: "alpha",
             buttonStyle: { "border-color": "#ffffff", "border-width": "2px", "border-radius": "1px" },
+        },
+        Beta: {
+            embedLayer: "beta",
+            buttonStyle: { "border-color": "#ffffff", "border-width": "2px", "border-radius": "1px" },
+            unlocked() { return hasMilestone("alpha", 6) || player.beta.unlocked },
         },
     },
     doReset() {},
@@ -370,6 +492,16 @@ addLayer("a", {
                 },
             ],
             buttonStyle: { "border-color": "#ffffff", "border-width": "2px", "border-radius": "1px" },
+        },
+        Beta: {
+            content: [
+                function() {
+                    let rows = [4]
+                    return ["achievements", rows]
+                },
+            ],
+            buttonStyle: { "border-color": "#ffffff", "border-width": "2px", "border-radius": "1px" },
+            unlocked() { return hasMilestone("alpha", 6) || player.beta.unlocked }
         },
     },
     achievements: {
@@ -479,6 +611,42 @@ addLayer("a", {
             name: "Do a beta wave (barrelroll)",
             tooltip: "Get the 7th Alpha milestone",
             done() { return hasMilestone("alpha", 6) },
+        },
+
+        41: {
+            name: "This is gonna be repetitive",
+            tooltip: "Get the 1st Beta milestone",
+            done() { return hasMilestone("beta", 0) },
+        },
+        42: {
+            name: "Only one for two?",
+            tooltip: "Get the 2nd Beta milestone",
+            done() { return hasMilestone("beta", 1) },
+        },
+        43: {
+            name: "Only two after three?",
+            tooltip: "Get the 3rd Beta milestone",
+            done() { return hasMilestone("beta", 2) },
+        },
+        44: {
+            name: "Why did this not come sooner?",
+            tooltip: "Get the 4th Beta milestone",
+            done() { return hasMilestone("beta", 3) },
+        },
+        45: {
+            name: "Now we don't need to worry about that",
+            tooltip: "Get the 5th Beta milestone",
+            done() { return hasMilestone("beta", 4) },
+        },
+        46: {
+            name: "YES, thank you",
+            tooltip: "Get the 6th Beta milestone",
+            done() { return hasMilestone("beta", 5) },
+        },
+        47: {
+            name: "Is this getting fast now?",
+            tooltip: "Get the 7th Beta milestone",
+            done() { return hasMilestone("beta", 6) },
         },
 
         /*

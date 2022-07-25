@@ -36,6 +36,7 @@ function getPointGen() {
 	if (hasUpgrade("alpha", 12)) gain = gain.pow(2)
 	if (hasChallenge("alpha", 31)) gain = gain.pow(challengeEffect("alpha", 31))
 	if (hasUpgrade("alpha", 23)) gain = gain.mul(1000)
+	gain = gain.mul(tmp.beta.effect)
 	if (inChallenge("alpha", 21)) gain = gain.sqrt()
 	if (inChallenge("alpha", 22)) gain = gain.cbrt()
 	return gain
@@ -55,7 +56,7 @@ var displayThings = [
 ]
 
 function isEndgame() {
-	return player.alpha.points.gte("1e1421")
+	return player.beta.times >= 20
 }
 
 var backgroundStyle = {
@@ -70,78 +71,75 @@ function fixOldSave(oldVersion){
 }
 
 let VERSION = {
-	num: "0.4",
-	name: "Pre-Beta?",
+	num: "0.5",
+	name: "Beta",
 }
 
 let winText = `Congratulations! You have completed the challenge that this tree presented before you, but for now...`
 
-let changelog = `
-	<h1 style='color:#ee0000;'>Changelog</h1><br><br><br><br>
-		<details>
-			<summary><h2 style='color:#eeee00'>Endgame - Spoilers - v0.4</h2></summary>
-			<ul>
-				<li class="Endgame">1e1421 α</li>
-			</ul>
-		</details>
-		<br><br><br>
-
-		<details open>
-			<summary><h2 style='color:#f06741'>v0.4 - Pre-Beta?</h2></summary>
-			<ul>
-				<li class="Added">Two milestones</li>
-				<li class="Added">Seven achievements</li>
-				<li class="Added">Five upgrades</li>
-			</ul>
-			<ul>
-				<li class="Changed">2nd set of Alpha II completion to now have goal scaling</li>
-			</ul>
-		</details>
-
-		<details>
-			<summary><h2 style='color:#69f5bb'>v0.3.1 - Fix</h2></summary>
-			<ul>
-				<li class="Fixed">Fixed Alpha II having the wrong goal</li>
-			</ul>
-		</details>
-
-		<details>
-			<summary><h2 style='color:#69f5bb'>v0.3 - Upgrade the challenge?</h2></summary>
-			<ul>
-				<li class="Added">Two milestones</li>
-				<li class="Added">Two challenges</li>
-				<li class="Added">Five upgrades</li>
-				<li class="Added">Seven achievements</li>
-			</ul>
-			<ul>
-				<li class="Changed">Milestones to now always show</li>
-				<li class="Changed">Milestones style</li>
-			</ul>
-			<ul>
-				<li class="Removed">Unused files like docs</li>
-			</ul>
-		</details>
-
-		<details>
-			<summary><h2 style='color:#add2ed'>v0.2 - Goals in life?</h2></summary>
-			<ul>
-				<li class="Added">A challenge</li>
-				<li class="Added">A milestone</li>
-				<li class="Added">7 Achievements</li>
-			</ul>
-			<ul>
-				<li class="Changed">Alpha II to now also reset Alpha points on enter</li>
-				<li class="Changed">Alpha II to now also square root Alpha gain</li>
-				<li class="Changed">Changelog</li>
-			</ul>
-		</details>
-
-		<details>
-			<summary><h2 style='color:#f7922d'>v0.1 - Challenging?</h2></summary>
-			<ul>
-				<li class="Added">A layer</li>
-				<li class="Added">Two milestones</li>
-				<li class="Added">Two challenges</li>
-			</ul>
-		</details>
-`
+let changelog = [
+	["display-text", "<h1 style='color:#ee0000;'>Changelog</h1>"],
+	["blank", "50px"],
+	["version", { open: false, color: "#ffff00", name: "Endgame - v0.5", items: [
+		{ summary: "Spoilers", items: [[
+			{type: "Endgame", description: "20 Beta resets"},
+		]]},
+	]}],
+	["blank", "50px"],
+	["version", { open: true, color: "#7da6ff", name: "Beta", items: [
+		{ summary: "v0.5", items: [[
+			{type: "Added", description: "A layer"},
+			{type: "Added", description: "Seven milestones"},
+			{type: "Added", description: "Seven achievements"},
+			{type: "Added", description: "version component for changelog"},
+		],[
+			{type: "Changed", description: "Changelog to look a bit better"},
+			{type: "Changed", description: "It so changelog uses the new version component"},
+		],[
+			{type: "Fixed", description: "A grammar mistake"},
+		]]},
+	]}],
+	["version", { open: false, color: "#f06741", name: "Pre-Beta?", items: [
+		{ summary: "v0.4", items: [[
+			{type: "Added", description: "Two milestones"},
+			{type: "Added", description: "Seven achievements"},
+			{type: "Added", description: "Five upgrades"},
+		],[
+			{type: "Changed", description: "2nd set of Alpha II completion to now have goal scaling"},
+		]]},
+	]}],
+	["version", { open: false, color: "#69f5bb", name: "Upgrade the challenge", items: [
+		{ summary: "v0.3.1", items: [[
+			{type: "Fixed", description: "Fixed Alpha II having the wrong goal"},
+		]]},
+		{ summary: "v0.3", items: [[
+			{type: "Added", description: "Two milestones"},
+			{type: "Added", description: "Two challenges"},
+			{type: "Added", description: "Five upgrades"},
+			{type: "Added", description: "Seven achievements"},
+		],[
+			{type: "Changed", description: "Milestones to now always show"},
+			{type: "Changed", description: "Milestones style"},
+		],[
+			{type: "Removed", description: "Unused files like docs"},
+		]]},
+	]}],
+	["version", { open: false, color: "#add2ed", name: "Goals in life?", items: [
+		{ summary: "v0.2", items: [[
+			{type: "Added", description: "A challenge"},
+			{type: "Added", description: "A milestone"},
+			{type: "Added", description: "Seven achievements"},
+		],[
+			{type: "Changed", description: "Alpha II to now also reset Alpha points on enter"},
+			{type: "Changed", description: "Alpha II to now also square root Alpha gain"},
+			{type: "Changed", description: "Changelog"},
+		]]},
+	]}],
+	["version", { open: false, color: "#f7922d", name: "Challenging?", items: [
+		{ summary: "v0.1", items: [[
+			{type: "Added", description: "A layer"},
+			{type: "Added", description: "Two milestones"},
+			{type: "Added", description: "Two challenges"},
+		]]},
+	]}],
+]
