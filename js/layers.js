@@ -50,7 +50,11 @@ addLayer("alpha", {
         Upgrades: {
             content: [
                 alphaHave,
-                "upgrades",
+                function() {
+                    let rows = [1]
+                    if (tmp[this.layer].upgrades[21].unlocked) rows.push(2)
+                    return ["upgrades", rows]
+                },
             ],
             unlocked() { return hasMilestone("alpha", 3) },
         },
@@ -95,7 +99,9 @@ addLayer("alpha", {
                 `
             },
             rewardEffect() {
-                let eff = player.alphaIII.max(1).log2().max(1)
+                let base = 2
+                if (hasUpgrade(this.layer, 21)) base = 1.1
+                let eff = player.alphaIII.max(1).log(base).max(1)
                 if (hasChallenge(this.layer, 22)) eff = eff.pow(2)
                 return eff
             },
@@ -116,6 +122,7 @@ addLayer("alpha", {
             completionLimit() {
                 let base = 5
                 if (hasUpgrade(this.layer, 14)) base = 10
+                if (hasMilestone(this.layer, 5)) base = 20
                 return base
             },
             canComplete() { return player.points.gte(this.goal()) },
@@ -132,11 +139,14 @@ addLayer("alpha", {
                 let base = new Decimal(2)
                 if (hasUpgrade(this.layer, 11)) base = new Decimal(4)
                 if (hasUpgrade(this.layer, 14)) base = new Decimal(8)
-                return base.pow(challengeCompletions(this.layer, this.id)).max(1)
+                let eff = base.pow(challengeCompletions(this.layer, this.id)).max(1)
+                if (hasMilestone(this.layer, 5)) eff = eff.pow(1.1)
+                return eff
             },
             goal() {
                 if (challengeCompletions(this.layer, this.id) < 5) return new Decimal(5).mul(challengeCompletions(this.layer, this.id)).add(5)
-                return new Decimal(5e16)
+                if (challengeCompletions(this.layer, this.id) < 10) return new Decimal(1e12).mul(new Decimal(10).pow(challengeCompletions(this.layer, this.id) - 5))
+                return new Decimal(1e51).mul(new Decimal(5000).pow(challengeCompletions(this.layer, this.id) - 5))
             },
             onEnter() {
                 player[this.layer].points = new Decimal(0)
@@ -219,7 +229,45 @@ addLayer("alpha", {
         15: {
             title: "α V",
             description: "Alpha V effect is better",
-            cost: new Decimal(3e79),
+            cost: new Decimal(1e79),
+        },
+
+        21: {
+            title: "α VI",
+            description: "Alpha III effect is better",
+            cost: new Decimal(1e110),
+            unlocked() { return hasUpgrade(this.layer, 15) },
+        },
+        22: {
+            title: "α VII",
+            description: "Alpha II effect also applies to ω gain",
+            cost: new Decimal(1e139),
+            unlocked() { return hasUpgrade(this.layer, 15) },
+        },
+        23: {
+            title: "α VIII",
+            description: "Multiply ω gain by x1000 after all powers",
+            cost: new Decimal("1e450"),
+            unlocked() { return hasUpgrade(this.layer, 15) },
+        },
+        24: {
+            title: "α IX",
+            description: "ω boosts it's own gain",
+            effect() { return player.points.max(1).log10().max(1) },
+            effectDisplay() { return `x${format(this.effect())}` },
+            cost: new Decimal(1e218),
+            currencyDisplayName: "ω",
+            currencyInternalName: "points",
+            currencyLocation() { return player },
+            unlocked() { return hasUpgrade(this.layer, 15) },
+        },
+        25: {
+            title: "α X",
+            description: "α boosts it's own gain. Max x1e1000",
+            effect() { return player[this.layer].points.pow(0.65).max(1).min("1e1000") },
+            effectDisplay() { return `x${format(this.effect())}` },
+            cost: new Decimal("5e490"),
+            unlocked() { return hasUpgrade(this.layer, 15) },
         },
     },
     milestones: {
@@ -248,10 +296,21 @@ addLayer("alpha", {
             effectDescription: "Unlock the final challenge and Alpha I total will automatically be increased without entering the challenge",
             done() { return player[this.layer].points.gte(1e24) },
         },
+        5: {
+            requirementDescription: "1e279 α (6)",
+            effectDescription: "You can complete Alpha II twice as many times and it's effect is raised by 1.1",
+            done() { return player[this.layer].points.gte(1e279) },
+        },
+        6: {
+            requirementDescription: "1e1400 α (7)",
+            effectDescription: "Unlock a layer (Not implemented yet)",
+            done() { return player[this.layer].points.gte("1e1400") },
+        },
     },
     alphaGain() {
         let base = challengeEffect(this.layer, 11)
         base = base.mul(challengeEffect(this.layer, 21))
+        if (hasUpgrade(this.layer, 25)) base = base.mul(upgradeEffect(this.layer, 25))
         if (inChallenge(this.layer, 21)) base = base.sqrt()
         if (inChallenge(this.layer, 22)) base = base.cbrt()
         return base
@@ -306,6 +365,7 @@ addLayer("a", {
                 function() {
                     let rows = [1]
                     if (hasAchievement(this.layer, 17)) rows.push(2)
+                    if (hasAchievement(this.layer, 27)) rows.push(3)
                     return ["achievements", rows]
                 },
             ],
@@ -383,6 +443,42 @@ addLayer("a", {
             name: "Inflation row",
             tooltip: "Get α V",
             done() { return hasUpgrade("alpha", 15) },
+        },
+
+        31: {
+            name: "Lame",
+            tooltip: "Get α VI",
+            done() { return hasUpgrade("alpha", 21) },
+        },
+        32: {
+            name: "Better than expected",
+            tooltip: "Get α VII",
+            done() { return hasUpgrade("alpha", 22) },
+        },
+        33: {
+            name: "So i have to do it again?",
+            tooltip: "Get the 6th Alpha milestone",
+            done() { return hasMilestone("alpha", 5) },
+        },
+        34: {
+            name: "Is it done now for real?",
+            tooltip: "Get the 20th Alpha II completion",
+            done() { return challengeCompletions("alpha", 21) >= 20 },
+        },
+        35: {
+            name: "How much inflation does this update have?",
+            tooltip: "Get α IX",
+            done() { return hasUpgrade("alpha", 24) },
+        },
+        36: {
+            name: "Am i nearing the end of this?",
+            tooltip: "Get α X",
+            done() { return hasUpgrade("alpha", 25) },
+        },
+        37: {
+            name: "Do a beta wave (barrelroll)",
+            tooltip: "Get the 7th Alpha milestone",
+            done() { return hasMilestone("alpha", 6) },
         },
 
         /*

@@ -31,8 +31,11 @@ function getPointGen() {
 	let gain = new Decimal(1)
 	gain = gain.mul(tmp.alpha.effect)
 	gain = gain.mul(challengeEffect("alpha", 12))
+	if (hasUpgrade("alpha", 22)) gain = gain.mul(challengeEffect("alpha", 21))
+	if (hasUpgrade("alpha", 24)) gain = gain.mul(upgradeEffect("alpha", 24))
 	if (hasUpgrade("alpha", 12)) gain = gain.pow(2)
 	if (hasChallenge("alpha", 31)) gain = gain.pow(challengeEffect("alpha", 31))
+	if (hasUpgrade("alpha", 23)) gain = gain.mul(1000)
 	if (inChallenge("alpha", 21)) gain = gain.sqrt()
 	if (inChallenge("alpha", 22)) gain = gain.cbrt()
 	return gain
@@ -52,7 +55,7 @@ var displayThings = [
 ]
 
 function isEndgame() {
-	return player.alpha.points.gte(1e110)
+	return player.alpha.points.gte("1e1421")
 }
 
 var backgroundStyle = {
@@ -67,8 +70,8 @@ function fixOldSave(oldVersion){
 }
 
 let VERSION = {
-	num: "0.3.1",
-	name: "Upgrade the challenge?",
+	num: "0.4",
+	name: "Pre-Beta?",
 }
 
 let winText = `Congratulations! You have completed the challenge that this tree presented before you, but for now...`
@@ -78,19 +81,31 @@ let changelog = `
 		<details>
 			<summary><h2 style='color:#eeee00'>Endgame - Spoilers - v0.3</h2></summary>
 			<ul>
-				<li class="Endgame">1.00e110 α</li>
+				<li class="Endgame">1e1421 α</li>
 			</ul>
 		</details>
 		<br><br><br>
 
 		<details open>
+			<summary><h2 style='color:#f06741'>v0.4 - Pre-Beta?</h2></summary>
+			<ul>
+				<li class="Added">Two milestones</li>
+				<li class="Added">Seven achievements</li>
+				<li class="Added">Five upgrades</li>
+			</ul>
+			<ul>
+				<li class="Changed">2nd set of Alpha II completion to now have goal scaling</li>
+			</ul>
+		</details>
+
+		<details>
 			<summary><h2 style='color:#69f5bb'>v0.3.1 - Fix</h2></summary>
 			<ul>
 				<li class="Fixed">Fixed Alpha II having the wrong goal</li>
 			</ul>
 		</details>
 
-		<details open>
+		<details>
 			<summary><h2 style='color:#69f5bb'>v0.3 - Upgrade the challenge?</h2></summary>
 			<ul>
 				<li class="Added">Two milestones</li>

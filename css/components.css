@@ -7,40 +7,40 @@
 	overflow: visible;
 }
 
-.upgTable>.upgRow:first-of-type>div:first-child>.upgAlign>.upg {
+.upgTable>.upgRow:first-of-type>div:first-of-type>.upgAlign>.upg {
 	border-radius: 8px 0 0 0;
 }
 
-.upgTable>.upgRow:first-of-type>div:last-child>.upgAlign>.upg {
+.upgTable>.upgRow:first-of-type>div:last-of-type>.upgAlign>.upg {
 	border-radius: 0 8px 0 0;
 }
 
-.upgTable>.upgRow:first-of-type>div:only-child>.upgAlign>.upg {
+.upgTable>.upgRow:first-of-type>div:only-of-type>.upgAlign>.upg {
 	border-radius: 8px;
 }
 
-.upgTable>.upgRow:last-of-type>div:first-child>.upgAlign>.upg {
+.upgTable>.upgRow:last-of-type>div:first-of-type>.upgAlign>.upg {
 	border-radius: 0 0 0 8px;
 }
 
-.upgTable>.upgRow:last-of-type>div:last-child>.upgAlign>.upg {
+.upgTable>.upgRow:last-of-type>div:last-of-type>.upgAlign>.upg {
 	border-radius: 0 0 8px 0;
 }
 
-.upgTable>.upgRow:last-of-type>div:only-child>.upgAlign>.upg {
+.upgTable>.upgRow:last-of-type>div:only-of-type>.upgAlign>.upg {
 	border-radius: 8px;
 }
 
-.upgTable>.upgRow:only-of-type>div:first-child>.upgAlign>.upg {
+.upgTable>.upgRow:only-of-type>div:first-of-type>.upgAlign>.upg {
 	border-radius: 8px 0 0 8px;
 }
 
-.upgTable>.upgRow:only-of-type>div:last-child>.upgAlign>.upg {
+.upgTable>.upgRow:only-of-type>div:last-of-type>.upgAlign>.upg {
 	border-radius: 0 8px 8px 0;
 }
 
-.upgTable>.upgRow:only-of-type>div:only-child>.upgAlign>.upg {
-	border-radius: 8px 8px;
+.upgTable>.upgRow:only-of-type>div:only-of-type>.upgAlign>.upg {
+	border-radius: 8px;
 }
 
 .achievement {
@@ -53,40 +53,40 @@
 	text-shadow: 0 0 2px #000000;
 }
 
-.upgTable>.upgRow:first-of-type>div:first-child>.upgAlign>.achievement {
+.upgTable>.upgRow:first-of-type>div:first-of-type>.upgAlign>.achievement {
 	border-radius: 8px 0 0 0;
 }
 
-.upgTable>.upgRow:first-of-type>div:last-child>.upgAlign>.achievement {
+.upgTable>.upgRow:first-of-type>div:last-of-type>.upgAlign>.achievement {
 	border-radius: 0 8px 0 0;
 }
 
-.upgTable>.upgRow:first-of-type>div:only-child>.upgAlign>.achievement {
+.upgTable>.upgRow:first-of-type>div:only-of-type>.upgAlign>.achievement {
 	border-radius: 8px;
 }
 
-.upgTable>.upgRow:last-of-type>div:first-child>.upgAlign>.achievement {
+.upgTable>.upgRow:last-of-type>div:first-of-type>.upgAlign>.achievement {
 	border-radius: 0 0 0 8px;
 }
 
-.upgTable>.upgRow:last-of-type>div:last-child>.upgAlign>.achievement {
+.upgTable>.upgRow:last-of-type>div:last-of-type>.upgAlign>.achievement {
 	border-radius: 0 0 8px 0;
 }
 
-.upgTable>.upgRow:last-of-type>div:only-child>.upgAlign>.achievement {
+.upgTable>.upgRow:last-of-type>div:only-of-type>.upgAlign>.achievement {
 	border-radius: 8px;
 }
 
-.upgTable>.upgRow:only-of-type>div:first-child>.upgAlign>.achievement {
+.upgTable>.upgRow:only-of-type>div:first-of-type>.upgAlign>.achievement {
 	border-radius: 8px 0 0 8px;
 }
 
-.upgTable>.upgRow:only-of-type>div:last-child>.upgAlign>.achievement {
+.upgTable>.upgRow:only-of-type>div:last-of-type>.upgAlign>.achievement {
 	border-radius: 0 8px 8px 0;
 }
 
-.upgTable>.upgRow:only-of-type>div:only-child>.upgAlign>.achievement {
-	border-radius: 8px 8px;
+.upgTable>.upgRow:only-of-type>div:only-of-type>.upgAlign>.achievement {
+	border-radius: 8px;
 }
 
 .achievement:hover {
