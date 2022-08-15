@@ -7,39 +7,39 @@
 	overflow: visible;
 }
 
-.upgTable>.upgRow:first-of-type>div:first-of-type>.upgAlign>.upg {
+.upgTable>.upgRow:first-of-type>.upgAlign:first-of-type>.upg {
 	border-radius: 8px 0 0 0;
 }
 
-.upgTable>.upgRow:first-of-type>div:last-of-type>.upgAlign>.upg {
+.upgTable>.upgRow:first-of-type>.upgAlign:last-of-type>.upg {
 	border-radius: 0 8px 0 0;
 }
 
-.upgTable>.upgRow:first-of-type>div:only-of-type>.upgAlign>.upg {
+.upgTable>.upgRow:first-of-type>.upgAlign:only-of-type>.upg {
 	border-radius: 8px;
 }
 
-.upgTable>.upgRow:last-of-type>div:first-of-type>.upgAlign>.upg {
+.upgTable>.upgRow:last-of-type>.upgAlign:first-of-type>.upg {
 	border-radius: 0 0 0 8px;
 }
 
-.upgTable>.upgRow:last-of-type>div:last-of-type>.upgAlign>.upg {
+.upgTable>.upgRow:last-of-type>.upgAlign:last-of-type>.upg {
 	border-radius: 0 0 8px 0;
 }
 
-.upgTable>.upgRow:last-of-type>div:only-of-type>.upgAlign>.upg {
+.upgTable>.upgRow:last-of-type>.upgAlign:only-of-type>.upg {
 	border-radius: 8px;
 }
 
-.upgTable>.upgRow:only-of-type>div:first-of-type>.upgAlign>.upg {
+.upgTable>.upgRow:only-of-type>.upgAlign:first-of-type>.upg {
 	border-radius: 8px 0 0 8px;
 }
 
-.upgTable>.upgRow:only-of-type>div:last-of-type>.upgAlign>.upg {
+.upgTable>.upgRow:only-of-type>.upgAlign:last-of-type>.upg {
 	border-radius: 0 8px 8px 0;
 }
 
-.upgTable>.upgRow:only-of-type>div:only-of-type>.upgAlign>.upg {
+.upgTable>.upgRow:only-of-type>.upgAlign:only-of-type>.upg {
 	border-radius: 8px;
 }
 
@@ -53,39 +53,39 @@
 	text-shadow: 0 0 2px #000000;
 }
 
-.upgTable>.upgRow:first-of-type>div:first-of-type>.upgAlign>.achievement {
+.upgTable>.upgRow:first-of-type>.upgAlign:first-of-type>.achievement {
 	border-radius: 8px 0 0 0;
 }
 
-.upgTable>.upgRow:first-of-type>div:last-of-type>.upgAlign>.achievement {
+.upgTable>.upgRow:first-of-type>.upgAlign:last-of-type>.achievement {
 	border-radius: 0 8px 0 0;
 }
 
-.upgTable>.upgRow:first-of-type>div:only-of-type>.upgAlign>.achievement {
+.upgTable>.upgRow:first-of-type>.upgAlign:only-of-type>.achievement {
 	border-radius: 8px;
 }
 
-.upgTable>.upgRow:last-of-type>div:first-of-type>.upgAlign>.achievement {
+.upgTable>.upgRow:last-of-type>.upgAlign:first-of-type>.achievement {
 	border-radius: 0 0 0 8px;
 }
 
-.upgTable>.upgRow:last-of-type>div:last-of-type>.upgAlign>.achievement {
+.upgTable>.upgRow:last-of-type>.upgAlign:last-of-type>.achievement {
 	border-radius: 0 0 8px 0;
 }
 
-.upgTable>.upgRow:last-of-type>div:only-of-type>.upgAlign>.achievement {
+.upgTable>.upgRow:last-of-type>.upgAlign:only-of-type>.achievement {
 	border-radius: 8px;
 }
 
-.upgTable>.upgRow:only-of-type>div:first-of-type>.upgAlign>.achievement {
+.upgTable>.upgRow:only-of-type>.upgAlign:first-of-type>.achievement {
 	border-radius: 8px 0 0 8px;
 }
 
-.upgTable>.upgRow:only-of-type>div:last-of-type>.upgAlign>.achievement {
+.upgTable>.upgRow:only-of-type>.upgAlign:last-of-type>.achievement {
 	border-radius: 0 8px 8px 0;
 }
 
-.upgTable>.upgRow:only-of-type>div:only-of-type>.upgAlign>.achievement {
+.upgTable>.upgRow:only-of-type>.upgAlign:only-of-type>.achievement {
 	border-radius: 8px;
 }
 
@@ -104,40 +104,32 @@
 	position:relative;
 }
 
-.milestone {
+.mile {
 	width: 100%;
 	min-width: 120px;
 	padding-left: 5px;
 	padding-right: 5px;
 	height: 75px;
-	background-color: #bf8f8f;
+	background-color: var(--locked);
 	border: 3px solid;
 	border-color: rgba(0, 0, 0, 0.125);
 	color: rgba(0, 0, 0, 0.5);
 }
 
 .milestoneDone {
-	width: 100%;
-	min-width: 120px;
-	padding-left: 5px;
-	padding-right: 5px;
-	height: 75px;
-	background-color: #77bf5f;
-	border: 3px solid;
-	border-color: rgba(0, 0, 0, 0.125);
-	color: rgba(0, 0, 0, 0.5);
+	background-color: var(--layer);
 }
 
 table>tr:first-of-type>.mile {
-	border-radius: 4px 4px 0 0;
+	border-radius: 8px 8px 0 0;
 }
 
 table>tr:last-of-type>.mile {
-	border-radius: 0 0 4px 4px;
+	border-radius: 0 0 8px 8px;
 }
 
 table>tr:only-of-type>.mile {
-	border-radius: 4px;
+	border-radius: 8px;
 }
 
 .challenge {
@@ -150,11 +142,46 @@ table>tr:only-of-type>.mile {
 	height: fit-content;
 	padding-bottom: 10px;
 	font-size: 15px;
+}
+
+.upgTable>.upgRow:first-of-type>.challenge:first-of-type {
+	border-radius: 8px 0 0 0;
+}
+
+.upgTable>.upgRow:first-of-type>.challenge:last-of-type {
+	border-radius: 0 8px 0 0;
+}
+
+.upgTable>.upgRow:first-of-type>.challenge:only-of-type {
+	border-radius: 8px;
+}
+
+.upgTable>.upgRow:last-of-type>.challenge:first-of-type {
+	border-radius: 0 0 0 8px;
+}
+
+.upgTable>.upgRow:last-of-type>.challenge:last-of-type {
+	border-radius: 0 0 8px 0;
+}
+
+.upgTable>.upgRow:last-of-type>.challenge:only-of-type {
+	border-radius: 8px;
+}
+
+.upgTable>.upgRow:only-of-type>.challenge:first-of-type {
+	border-radius: 8px 0 0 8px;
+}
+
+.upgTable>.upgRow:only-of-type>.challenge:last-of-type {
+	border-radius: 0 8px 8px 0;
+}
+
+.upgTable>.upgRow:only-of-type>.challenge:only-of-type {
 	border-radius: 8px;
 }
 
 .challenge.done {
-	background-color: #77bf5f;
+	background-color: var(--layer);
 }
 
 .challenge.canComplete {

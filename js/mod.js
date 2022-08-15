@@ -56,7 +56,7 @@ var displayThings = [
 ]
 
 function isEndgame() {
-	return player.beta.times >= 20
+	return hasUpgrade("beta", 15)
 }
 
 var backgroundStyle = {
@@ -68,10 +68,11 @@ function maxTickLength() {
 }
 
 function fixOldSave(oldVersion){
+	
 }
 
 let VERSION = {
-	num: "0.5",
+	num: "0.6",
 	name: "Beta",
 }
 
@@ -80,12 +81,29 @@ let winText = `Congratulations! You have completed the challenge that this tree 
 let changelog = [
 	["display-text", "<h1 style='color:#ee0000;'>Changelog</h1>"],
 	["blank", "50px"],
-	["version", { open: false, color: "#ffff00", name: "Endgame - v0.5", items: [
+	["version", { open: false, color: "#ffff00", name: "Endgame - v0.6", items: [
 		{ summary: "Spoilers", items: [[
-			{type: "Endgame", description: "20 Beta resets"},
+			{type: "Endgame", description: "β V upgrade"},
 		]]},
 	]}],
 	["blank", "50px"],
+	["version", { open: true, color: "#7da6ff", name: "Beta", items: [
+		{ summary: "v0.6", items: [[
+			{type: "Added", description: "Ten challenges"},
+			{type: "Added", description: "Five upgrades"},
+			{type: "Added", description: "Two milestones"},
+			{type: "Added", description: "A theme"},
+			{type: "Added", description: "A system to notify players"},
+		],[
+			{type: "Changed", description: "It so achievements now show in the layer they are for"},
+			{type: "Changed", description: "It so challenges are only colored when maxed"},
+			{type: "Changed", description: "It so content matches theme and layer color"},
+			{type: "Changed", description: "It components to make rounding corners easier"},
+			{type: "Changed", description: "The style for option menu"},
+		],[
+			{type: "Removed", description: "Removed some options in the option menu"},
+		]]},
+	]}],
 	["version", { open: true, color: "#7da6ff", name: "Beta", items: [
 		{ summary: "v0.5", items: [[
 			{type: "Added", description: "A layer"},
