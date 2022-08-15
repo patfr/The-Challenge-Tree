@@ -88,6 +88,9 @@ let changelog = [
 	]}],
 	["blank", "50px"],
 	["version", { open: true, color: "#7da6ff", name: "Beta", items: [
+		{ summary: "v0.6.1", items: [[
+			{type: "Fixed", description: "Fixed Beta gain"},
+		]]},
 		{ summary: "v0.6", items: [[
 			{type: "Added", description: "Ten challenges"},
 			{type: "Added", description: "Five upgrades"},
@@ -104,7 +107,7 @@ let changelog = [
 			{type: "Removed", description: "Removed some options in the option menu"},
 		]]},
 	]}],
-	["version", { open: true, color: "#7da6ff", name: "Beta", items: [
+	["version", { open: false, color: "#7da6ff", name: "Beta", items: [
 		{ summary: "v0.5", items: [[
 			{type: "Added", description: "A layer"},
 			{type: "Added", description: "Seven milestones"},

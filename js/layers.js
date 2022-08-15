@@ -436,9 +436,9 @@ addLayer("beta", {
     prestigeButtonText() { return player.alpha.points.gte(tmp[this.layer].requires) ? "Reset for 1 β" : "Requires: 1e1421 α" },
     directMult() {
         let mult = new Decimal(1)
-        mult = mult.add(challengeEffect(this.layer, 21))
-        mult = mult.add(challengeEffect(this.layer, 22))
-        mult = mult.add(challengeEffect(this.layer, 23))
+        if (hasChallenge(this.layer, 21)) mult = mult.add(challengeEffect(this.layer, 21))
+        if (hasChallenge(this.layer, 22)) mult = mult.add(challengeEffect(this.layer, 22))
+        if (hasChallenge(this.layer, 23)) mult = mult.add(challengeEffect(this.layer, 23))
 
         mult = mult.mul(challengeEffect(this.layer, 11))
         mult = mult.mul(challengeEffect(this.layer, 12))
