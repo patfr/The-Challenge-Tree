@@ -124,10 +124,10 @@ function loadVue() {
 		props: ['layer', 'data'],
 		template: `
 		<div v-if="tmp[layer].challenges" class="upgTable">
-		<div v-for="row in (data === undefined ? tmp[layer].challenges.rows : data)" class="upgRow">
-		<div v-for="col in tmp[layer].challenges.cols">
+			<div v-for="row in (data === undefined ? tmp[layer].challenges.rows : data)" v-if="tmp[layer].challenges[row*10+1]!== undefined && tmp[layer].challenges[row*10+1].unlocked" class="upgRow">
+				<template v-for="col in tmp[layer].challenges.cols">
 					<challenge v-if="tmp[layer].challenges[row*10+col]!== undefined && tmp[layer].challenges[row*10+col].unlocked" :layer = "layer" :data = "row*10+col" v-bind:style="tmp[layer].componentStyles.challenge"></challenge>
-				</div>
+				</template>
 			</div>
 		</div>
 		`
@@ -158,10 +158,12 @@ function loadVue() {
 		props: ['layer', 'data'],
 		template: `
 		<div v-if="tmp[layer].upgrades" class="upgTable">
-			<div v-for="row in (data === undefined ? tmp[layer].upgrades.rows : data)" class="upgRow">
-				<div v-for="col in tmp[layer].upgrades.cols"><div v-if="tmp[layer].upgrades[row*10+col]!== undefined && tmp[layer].upgrades[row*10+col].unlocked" class="upgAlign">
-					<upgrade :layer = "layer" :data = "row*10+col" v-bind:style="tmp[layer].componentStyles.upgrade"></upgrade>
-				</div></div>
+			<div v-for="row in (data === undefined ? tmp[layer].upgrades.rows : data)" v-if="tmp[layer].upgrades[row*10+1]!== undefined && tmp[layer].upgrades[row*10+1].unlocked" class="upgRow">
+				<template v-for="col in tmp[layer].upgrades.cols">
+					<div v-if="tmp[layer].upgrades[row*10+col]!== undefined && tmp[layer].upgrades[row*10+col].unlocked" class="upgAlign">
+						<upgrade :layer = "layer" :data = "row*10+col" v-bind:style="tmp[layer].componentStyles.upgrade"></upgrade>
+					</div>
+				</template>
 			</div>
 			<br>
 		</div>
@@ -173,7 +175,7 @@ function loadVue() {
 		props: ['layer', 'data'],
 		template: `
 		<button v-if="tmp[layer].upgrades && tmp[layer].upgrades[data]!== undefined && tmp[layer].upgrades[data].unlocked" :id='"upgrade-" + layer + "-" + data' v-on:click="buyUpg(layer, data)" v-bind:class="{ [layer]: true, tooltipBox: true, upg: true, bought: hasUpgrade(layer, data), locked: (!(canAffordUpgrade(layer, data))&&!hasUpgrade(layer, data)), can: (canAffordUpgrade(layer, data)&&!hasUpgrade(layer, data))}"
-			v-bind:style="[((!hasUpgrade(layer, data) && canAffordUpgrade(layer, data)) ? {'background-color': tmp[layer].color} : {}), tmp[layer].upgrades[data].style]">
+			v-bind:style="[((!hasUpgrade(layer, data) && canAffordUpgrade(layer, data)) ? {} : {}), tmp[layer].upgrades[data].style]">
 			<span v-if="layers[layer].upgrades[data].fullDisplay" v-html="run(layers[layer].upgrades[data].fullDisplay, layers[layer].upgrades[data])"></span>
 			<span v-else>
 				<span v-if= "tmp[layer].upgrades[data].title"><h3 v-html="tmp[layer].upgrades[data].title"></h3><br></span>
@@ -469,10 +471,12 @@ function loadVue() {
 		props: ['layer', 'data'],
 		template: `
 		<div v-if="tmp[layer].achievements" class="upgTable">
-			<div v-for="row in (data === undefined ? tmp[layer].achievements.rows : data)" class="upgRow">
-				<div v-for="col in tmp[layer].achievements.cols"><div v-if="tmp[layer].achievements[row*10+col]!== undefined && tmp[layer].achievements[row*10+col].unlocked" class="upgAlign">
-					<achievement :layer = "layer" :data = "row*10+col" v-bind:style="tmp[layer].componentStyles.achievement"></achievement>
-				</div></div>
+			<div v-for="row in (data === undefined ? tmp[layer].achievements.rows : data)" v-if="tmp[layer].achievements[row*10+1]!== undefined && tmp[layer].achievements[row*10+1].unlocked" class="upgRow">
+				<template v-for="col in tmp[layer].achievements.cols">
+					<div v-if="tmp[layer].achievements[row*10+col]!== undefined && tmp[layer].achievements[row*10+col].unlocked" class="upgAlign">
+						<achievement :layer = "layer" :data = "row*10+col" v-bind:style="tmp[layer].componentStyles.achievement"></achievement>
+					</div>
+				</template>
 			</div>
 			<br>
 		</div>
@@ -607,6 +611,19 @@ function loadVue() {
 					<ul v-for="(category, ic) in version.items">
 						<li v-for="(action, ia) in category" :class="action.type" v-html="action.description"></li>
 					</ul>
+				</details>
+			</div>
+		`
+	})
+
+	Vue.component('help', {
+		props: ['layer', 'data'],
+		template: `
+			<div>
+				<h1 :style="{color: data.color}" v-html="data.name"></h1>
+				<details v-for="(items, ii) in data.items" :open="data.open">
+					<summary><h3 :style="{color: data.color}" v-html="items.summary"></h3></summary>
+					<span v-for="(help, hi) in items.items" v-html="help"></span>
 				</details>
 			</div>
 		`

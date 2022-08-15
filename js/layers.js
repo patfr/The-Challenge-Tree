@@ -16,6 +16,7 @@ addLayer("alpha", {
     name: "Alpha",
     symbol: "α",
     color: "#f7922d",
+    colorCan: "#c47423",
     resource: "α",
     type: "none",
     row: 0,
@@ -37,26 +38,52 @@ addLayer("alpha", {
                     return ["challenges", [2]]
                 },
                 "blank",
-                ["challenges", [3]]
+                ["challenges", [3]],
+                ["blank", "50px"],
             ],
+            shouldNotify() { return false },
+            prestigeNotify() {
+                return (!maxedChallenge("alpha", 21) && tmp.alpha.challenges[21].unlocked) || 
+                    (!maxedChallenge("alpha", 22) && tmp.alpha.challenges[22].unlocked) ||
+                    (!maxedChallenge("alpha", 31) && tmp.alpha.challenges[31].unlocked)
+            },
         },
         Milestones: {
             content: [
                 alphaHave,
                 "milestones",
+                ["blank", "50px"],
             ],
             unlocked() { return player.alphaShow },
+            shouldNotify() { return false },
+            prestigeNotify() { return false },
         },
         Upgrades: {
             content: [
                 alphaHave,
-                function() {
-                    let rows = [1]
-                    if (tmp[this.layer].upgrades[21].unlocked || player.beta.unlocked) rows.push(2)
-                    return ["upgrades", rows]
-                },
+                "upgrades",
             ],
             unlocked() { return hasMilestone("alpha", 3) || player.beta.unlocked },
+            /*shouldNotify() { 
+                return tmp.alpha.notify
+                (canAffordUpgrade("alpha", 11) && !hasUpgrade("alpha", 11)) ||
+                    (canAffordUpgrade("alpha", 12) && !hasUpgrade("alpha", 12)) ||
+                    (canAffordUpgrade("alpha", 13) && !hasUpgrade("alpha", 13)) ||
+                    (canAffordUpgrade("alpha", 14) && !hasUpgrade("alpha", 14)) ||
+                    (canAffordUpgrade("alpha", 15) && !hasUpgrade("alpha", 15)) || 
+                    (canAffordUpgrade("alpha", 21) && !hasUpgrade("alpha", 21)) ||
+                    (canAffordUpgrade("alpha", 22) && !hasUpgrade("alpha", 22)) ||
+                    (canAffordUpgrade("alpha", 23) && !hasUpgrade("alpha", 23)) ||
+                    (canAffordUpgrade("alpha", 24) && !hasUpgrade("alpha", 24)) ||
+                    (canAffordUpgrade("alpha", 25) && !hasUpgrade("alpha", 25))
+            },*/
+        },
+        Achievements: {
+            content: [
+                ["layer-proxy", ["a", [["achievements", [1,2,3]]]]],
+            ],
+            shouldNotify() { return false },
+            prestigeNotify() { return false },
         },
     },
     challenges: {
@@ -215,21 +242,25 @@ addLayer("alpha", {
             title: "α II",
             description: "^2 ω gain",
             cost: new Decimal(1e14),
+            unlocked() { return hasUpgrade(this.layer, 11) || player.beta.unlocked },
         },
         13: {
             title: "α III",
             description: "Alpha milestone 5 also applies to Alpha III",
             cost: new Decimal(1e25),
+            unlocked() { return hasUpgrade(this.layer, 12) || player.beta.unlocked },
         },
         14: {
             title: "α IV",
             description: "Alpha II effect is better and you can complete it another 5 times",
             cost: new Decimal(1e72),
+            unlocked() { return hasUpgrade(this.layer, 13) || player.beta.unlocked },
         },
         15: {
             title: "α V",
             description: "Alpha V effect is better",
             cost: new Decimal(1e79),
+            unlocked() { return hasUpgrade(this.layer, 14) || player.beta.unlocked },
         },
 
         21: {
@@ -379,9 +410,8 @@ function betaHave() {
         [
             ["display-text", `
                 You have <h2 style='color:${tmp.beta.color};text-shadow:0 0 10px ${tmp.beta.color}'>${formatWhole(player.beta.points)}</h2> β,
-                which is giving a x${format(tmp.beta.effect)} to all prior currencies after powers. Max x400
+                which is giving a x${format(tmp.beta.effect)} to all prior currencies after powers.
             `],
-            ["display-text", `You have done ${formatWhole(player.beta.times)} resets`],
             "blank",
         ]
     ]
@@ -391,12 +421,56 @@ addLayer("beta", {
     name: "Beta",
     symbol: "β",
     color: "#7da6ff",
+    colorCan: "#6485cc",
     resource: "β",
-    type: "normal",
-    baseResource: "α",
-    baseAmount() { return player.alpha.points },
+    type: "custom",
     requires: new Decimal("1e1421"),
-    exponent: 0.001,
+    baseAmount() { return player.alpha.points },
+    getResetGain() { return player.alpha.points.gte(tmp[this.layer].requires) ? tmp[this.layer].directMult : new Decimal(0) },
+    getNextAt() { return new Decimal(0) },
+    canReset() { return player.alpha.points.gte(tmp[this.layer].requires) },
+    prestigeButtonText() { return player.alpha.points.gte(tmp[this.layer].requires) ? "Reset for 1 β" : "Requires: 1e1421 α" },
+    directMult() {
+        let mult = new Decimal(1)
+        mult = mult.add(challengeEffect(this.layer, 21))
+        mult = mult.add(challengeEffect(this.layer, 22))
+        mult = mult.add(challengeEffect(this.layer, 23))
+
+        mult = mult.mul(challengeEffect(this.layer, 11))
+        mult = mult.mul(challengeEffect(this.layer, 12))
+        mult = mult.mul(challengeEffect(this.layer, 13))
+
+        if (hasUpgrade(this.layer, 13)) {
+            mult = mult.mul(challengeEffect(this.layer, 21).max(1))
+            mult = mult.mul(challengeEffect(this.layer, 22).max(1))
+            mult = mult.mul(challengeEffect(this.layer, 23).max(1))
+        }
+
+        if (hasUpgrade(this.layer, 12)) mult = mult.mul(upgradeEffect(this.layer, 12))
+
+        mult = mult.pow(challengeEffect(this.layer, 31))
+        mult = mult.pow(challengeEffect(this.layer, 32))
+        mult = mult.pow(challengeEffect(this.layer, 33))
+        return mult
+    },
+    passiveGeneration() { return hasMilestone(this.layer, 7) ? 1 : 0 },
+    resetsNothing() { return hasMilestone(this.layer, 7) },
+    update(delta) {
+        if (hasMilestone(this.layer, 7)) {
+            player[this.layer].times += delta
+        }
+        if (hasUpgrade(this.layer, 11)) {
+            for (id in tmp[this.layer].challenges) {
+                if (isPlainObject(layers[this.layer].challenges[id])) {
+                    if (inChallenge(this.layer, id) && canCompleteChallenge(this.layer, id)){
+                        let times = challengeCompletions(this.layer, id)
+                        times = Math.min(times + 1, tmp[this.layer].challenges[id].completionLimit)
+                        player[this.layer].challenges[id] = times
+                    }
+                }
+            }
+        }
+    },
     row: 1,
     startData() { return {
         unlocked: false,
@@ -407,15 +481,264 @@ addLayer("beta", {
         Challenges: {
             content: [
                 betaHave,
-                "prestige-button",
+                function() {
+                    if (hasMilestone(this.layer, 7)) return "blank"
+                    return ["column", [
+                        "prestige-button",
+                        "blank",
+                        ["display-text", `You have ${format(player.alpha.points)} α`],
+                    ]]
+                },
+                ["challenges", [1,2,3]],
+                ["blank", "50px"],
+                ["challenges", [4]],
+                ["blank", "50px"],
             ],
         },
         Milestones: {
             content: [
                 betaHave,
+                () => ["display-text", `You have done ${formatWhole(player.beta.times)} resets`],
                 "blank",
                 "milestones",
+                ["blank", "50px"],
             ],
+        },
+        Upgrades: {
+            content: [
+                betaHave,
+                "upgrades",
+            ],
+            unlocked() { return hasMilestone("beta", 7) },
+        },
+        Achievements: {
+            content: [
+                ["layer-proxy", ["a", [["achievements", [4]]]]]
+            ],
+        },
+    },
+    challenges: {
+        11: {
+            name: "Beta I",
+            completionLimit: 100,
+            canComplete() { return player[this.layer].points.gte(this.goal()) },
+            fullDisplay() {
+                return `
+                Completions: ${challengeCompletions(this.layer, this.id)}/${this.completionLimit}<br><br>
+                Goal: ${format(this.goal())} β<br>
+                Reward: Multiplies to β gain<br>
+                Effect: x${format(this.rewardEffect())} β
+                `
+            },
+            rewardEffect() {
+                return new Decimal(3.5).pow(challengeCompletions(this.layer, this.id))
+            },
+            goal() { return Decimal.pow(challengeCompletions(this.layer, this.id), challengeCompletions(this.layer, this.id)).mul(20) },
+            marked() { return maxedChallenge(this.layer, this.id) },
+            unlocked() { return hasMilestone(this.layer, 7) },
+            style: { "width": "225px", "height": "225px" },
+        },
+        12: {
+            name: "Beta II",
+            completionLimit: 75,
+            canComplete() { return player[this.layer].points.gte(this.goal()) },
+            fullDisplay() {
+                return `
+                Completions: ${challengeCompletions(this.layer, this.id)}/${this.completionLimit}<br><br>
+                Goal: ${format(this.goal())} β<br>
+                Reward: Multiplies to β gain<br>
+                Effect: x${format(this.rewardEffect())} β
+                `
+            },
+            rewardEffect() {
+                return new Decimal(5).pow(challengeCompletions(this.layer, this.id))
+            },
+            goal() { return Decimal.pow(challengeCompletions(this.layer, this.id), 2 * challengeCompletions(this.layer, this.id)).mul(10000) },
+            marked() { return maxedChallenge(this.layer, this.id) },
+            unlocked() { return challengeCompletions(this.layer, 11) >= 5 },
+            style: { "width": "225px", "height": "225px" },
+        },
+        13: {
+            name: "Beta III",
+            completionLimit: 50,
+            canComplete() { return player[this.layer].points.gte(this.goal()) },
+            fullDisplay() {
+                return `
+                Completions: ${challengeCompletions(this.layer, this.id)}/${this.completionLimit}<br><br>
+                Goal: ${format(this.goal())} β<br>
+                Reward: Multiplies to β gain<br>
+                Effect: x${format(this.rewardEffect())} β
+                `
+            },
+            rewardEffect() {
+                return new Decimal(7.5).pow(challengeCompletions(this.layer, this.id))
+            },
+            goal() { return Decimal.pow(challengeCompletions(this.layer, this.id), 4 * challengeCompletions(this.layer, this.id)).mul(2.25e9) },
+            marked() { return maxedChallenge(this.layer, this.id) },
+            unlocked() { return challengeCompletions(this.layer, 12) >= 5 },
+            style: { "width": "225px", "height": "225px" },
+        },
+
+        21: {
+            name: "Beta IV",
+            completionLimit: 75,
+            canComplete() { return player[this.layer].points.gte(this.goal()) },
+            fullDisplay() {
+                return `
+                Completions: ${challengeCompletions(this.layer, this.id)}/${this.completionLimit}<br><br>
+                Goal: ${format(this.goal())} β<br>
+                Reward: Add to β base gain<br>
+                Effect: +${format(this.rewardEffect())} β
+                `
+            },
+            rewardEffect() {
+                return new Decimal(10).pow(challengeCompletions(this.layer, this.id))
+            },
+            goal() { return Decimal.pow(challengeCompletions(this.layer, this.id), 8 * challengeCompletions(this.layer, this.id)).mul(2e22) },
+            marked() { return maxedChallenge(this.layer, this.id) },
+            unlocked() { return challengeCompletions(this.layer, 13) >= 5 },
+            style: { "width": "225px", "height": "225px" },
+        },
+        22: {
+            name: "Beta V",
+            completionLimit: 65,
+            canComplete() { return player[this.layer].points.gte(this.goal()) },
+            fullDisplay() {
+                return `
+                Completions: ${challengeCompletions(this.layer, this.id)}/${this.completionLimit}<br><br>
+                Goal: ${format(this.goal())} β<br>
+                Reward: Add to β base gain<br>
+                Effect: +${format(this.rewardEffect())} β
+                `
+            },
+            rewardEffect() {
+                return new Decimal(1000).pow(challengeCompletions(this.layer, this.id))
+            },
+            goal() { return Decimal.pow(challengeCompletions(this.layer, this.id), 16 * challengeCompletions(this.layer, this.id)).mul(1e32) },
+            marked() { return maxedChallenge(this.layer, this.id) },
+            unlocked() { return challengeCompletions(this.layer, 13) >= 5 },
+            style: { "width": "225px", "height": "225px" },
+        },
+        23: {
+            name: "Beta VI",
+            completionLimit: 55,
+            canComplete() { return player[this.layer].points.gte(this.goal()) },
+            fullDisplay() {
+                return `
+                Completions: ${challengeCompletions(this.layer, this.id)}/${this.completionLimit}<br><br>
+                Goal: ${format(this.goal())} β<br>
+                Reward: Add to β base gain<br>
+                Effect: +${format(this.rewardEffect())} β
+                `
+            },
+            rewardEffect() {
+                return new Decimal(1e9).pow(challengeCompletions(this.layer, this.id))
+            },
+            goal() { return Decimal.pow(challengeCompletions(this.layer, this.id), 32 * challengeCompletions(this.layer, this.id)).mul(1e51) },
+            marked() { return maxedChallenge(this.layer, this.id) },
+            unlocked() { return challengeCompletions(this.layer, 13) >= 5 },
+            style: { "width": "225px", "height": "225px" },
+        },
+
+        31: {
+            name: "Beta VII",
+            completionLimit: 33,
+            canComplete() { return player[this.layer].points.gte(this.goal()) },
+            fullDisplay() {
+                return `
+                Completions: ${challengeCompletions(this.layer, this.id)}/${this.completionLimit}<br><br>
+                Goal: ${format(this.goal())} β<br>
+                Reward: Power β gain<br>
+                Effect: ^${format(this.rewardEffect())} β
+                `
+            },
+            rewardEffect() {
+                return new Decimal(0.01).mul(challengeCompletions(this.layer, this.id)).add(1)
+            },
+            goal() { return Decimal.pow(challengeCompletions(this.layer, this.id), 64 * challengeCompletions(this.layer, this.id)).mul(1e96) },
+            marked() { return maxedChallenge(this.layer, this.id) },
+            unlocked() { return challengeCompletions(this.layer, 23) >= 3 },
+            style: { "width": "225px", "height": "225px" },
+        },
+        32: {
+            name: "Beta VIII",
+            completionLimit: 20,
+            canComplete() { return player[this.layer].points.gte(this.goal()) },
+            fullDisplay() {
+                return `
+                Completions: ${challengeCompletions(this.layer, this.id)}/${this.completionLimit}<br><br>
+                Goal: ${format(this.goal())} β<br>
+                Reward: Power β gain<br>
+                Effect: ^${format(this.rewardEffect())} β
+                `
+            },
+            rewardEffect() {
+                return new Decimal(0.015).mul(challengeCompletions(this.layer, this.id)).add(1)
+            },
+            goal() { return Decimal.pow(challengeCompletions(this.layer, this.id), 128 * challengeCompletions(this.layer, this.id)).mul(1e119) },
+            marked() { return maxedChallenge(this.layer, this.id) },
+            unlocked() { return challengeCompletions(this.layer, 23) >= 3 },
+            style: { "width": "225px", "height": "225px" },
+        },
+        33: {
+            name: "Beta IX",
+            completionLimit: 12,
+            canComplete() { return player[this.layer].points.gte(this.goal()) },
+            fullDisplay() {
+                return `
+                Completions: ${challengeCompletions(this.layer, this.id)}/${this.completionLimit}<br><br>
+                Goal: ${format(this.goal())} β<br>
+                Reward: Power β gain<br>
+                Effect: ^${format(this.rewardEffect())} β
+                `
+            },
+            rewardEffect() {
+                return new Decimal(0.025).mul(challengeCompletions(this.layer, this.id)).add(1)
+            },
+            goal() { return Decimal.pow(challengeCompletions(this.layer, this.id), 256 * challengeCompletions(this.layer, this.id)).mul(1e154) },
+            marked() { return maxedChallenge(this.layer, this.id) },
+            unlocked() { return challengeCompletions(this.layer, 23) >= 3 },
+            style: { "width": "225px", "height": "225px" },
+        },
+
+        41: {
+            name: "Beta X",
+            canComplete() { return player[this.layer].points.gte(this.goal()) },
+            fullDisplay() {
+                return `
+                Goal: ${format(this.goal())} β<br>
+                Reward: Power β gain<br>
+                Effect: ^${format(this.rewardEffect())} β
+                `
+            },
+            rewardEffect() {
+                return new Decimal(0.025).mul(challengeCompletions(this.layer, this.id)).add(1)
+            },
+            goal() { return Decimal.pow(challengeCompletions(this.layer, this.id), 256 * challengeCompletions(this.layer, this.id)).mul(1e154) },
+            marked() { return maxedChallenge(this.layer, this.id) },
+            unlocked() { return challengeCompletions(this.layer, 23) >= 3 },
+            style: { "width": "687px", "height": "225px" },
+        },
+    },
+    upgrades: {
+        11: {
+            title: "β I",
+            description: "You can automatically complete challenges while in them",
+            cost: new Decimal(1e22),
+        },
+        12: {
+            title: "β II",
+            description: "ω and α boosts β gain",
+            effect() { return player.points.max(1).log10().mul(player.alpha.points.max(1).log10()).pow(7).max(1) },
+            effectDisplay() { return `x${format(this.effect())}` },
+            cost: new Decimal(1e217),
+            unlocked() { return hasUpgrade(this.layer, 11) },
+        },
+        13: {
+            title: "β III",
+            description: "Beta IV, V and VI multiplies β",
+            cost: new Decimal("1e347"),
+            unlocked() { return hasUpgrade(this.layer, 12) },
         },
     },
     milestones: {
@@ -454,9 +777,14 @@ addLayer("beta", {
             effectDescription: "Keep two Alpha milestones on reset",
             done() { return player[this.layer].times >= 15 },
         },
+        7: {
+            requirementDescription: "20 Beta resets (8)",
+            effectDescription: "Unlock upgrades and gain 100% of your β per second and a reset per second<br>but you can no longer reset, Beta no longer resets anything. Unlock challenges",
+            done() { return player[this.layer].times >= 15 },
+        },
     },
     effect() {
-        return player[this.layer].best.add(1).pow(2).max(1).min(400)
+        return player[this.layer].best.add(1).pow(2).max(1)
     },
     onPrestige() {
         player[this.layer].times += 1
@@ -479,31 +807,27 @@ addLayer("l", {
     doReset() {},
 })
 
-addLayer("a", {
-    color: "#ffff00",
+addLayer("help", {
+    color: "#000000",
     tabFormat: {
-        Alpha: {
+        General: {
             content: [
-                function() {
-                    let rows = [1]
-                    if (hasAchievement(this.layer, 17)) rows.push(2)
-                    if (hasAchievement(this.layer, 27)) rows.push(3)
-                    return ["achievements", rows]
-                },
+                ["help", { name: "Timewalls", color: "#eeeeee", items: [
+                    { summary: "What are they?", items: [
+                        "Timewalls are known as the time you need to wait<br> in between each action in the game.",
+                    ]},{ summary: "When is it too long?", items: [
+                        "Timewalls in this game are meant to be short.<br>This means if you wait more than 2 minutes.<br>It means you are either missing something or something broke.",
+                    ]},
+                ]}],
             ],
             buttonStyle: { "border-color": "#ffffff", "border-width": "2px", "border-radius": "1px" },
-        },
-        Beta: {
-            content: [
-                function() {
-                    let rows = [4]
-                    return ["achievements", rows]
-                },
-            ],
-            buttonStyle: { "border-color": "#ffffff", "border-width": "2px", "border-radius": "1px" },
-            unlocked() { return hasMilestone("alpha", 6) || player.beta.unlocked }
         },
     },
+    doReset() {},
+})
+
+addLayer("a", {
+    color: "#ffff00",
     achievements: {
         11: {
             name: "Wait what?",
@@ -545,6 +869,7 @@ addLayer("a", {
             name: "Use the forth",
             tooltip: "Complete Alpha IV",
             done() { return hasChallenge("alpha", 22) },
+            unlocked() { return hasAchievement(this.layer, 17) },
         },
         22: {
             name: "Inflation begins?",
@@ -581,6 +906,7 @@ addLayer("a", {
             name: "Lame",
             tooltip: "Get α VI",
             done() { return hasUpgrade("alpha", 21) },
+            unlocked() { return hasAchievement(this.layer, 27) },
         },
         32: {
             name: "Better than expected",
@@ -598,7 +924,7 @@ addLayer("a", {
             done() { return challengeCompletions("alpha", 21) >= 20 },
         },
         35: {
-            name: "How much inflation does this update have?",
+            name: "How much inflation does this have?",
             tooltip: "Get α IX",
             done() { return hasUpgrade("alpha", 24) },
         },

@@ -98,12 +98,27 @@ a {
 .opt {
 	height: 100px;
 	width: 100px;
-	border-radius: 25%;
-	border: 4px solid;
+	border: 3px solid;
 	background-color: var(--color);
 	border-color: rgba(0, 0, 0, 0.125);
 	color: rgba(0, 0, 0, 0.5);
 	cursor: pointer;
+}
+
+table>tr:first-of-type>td:first-of-type>.opt {
+	border-radius: 4px 0 0 0;
+}
+
+table>tr:first-of-type>td:last-of-type>.opt {
+	border-radius: 0 4px 0 0;
+}
+
+table>tr:last-of-type>td:first-of-type>.opt {
+	border-radius: 0 0 0 4px;
+}
+
+table>tr:last-of-type>td:last-of-type>.opt {
+	border-radius: 0 0 4px 0;
 }
 
 .opt:hover {
