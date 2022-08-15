@@ -828,7 +828,7 @@ addLayer("beta", {
         7: {
             requirementDescription: "20 Beta resets (8)",
             effectDescription: "Unlock upgrades and gain 100% of your β per second and a reset per second<br>but you can no longer reset, Beta no longer resets anything. Unlock challenges",
-            done() { return player[this.layer].times >= 15 },
+            done() { return player[this.layer].times >= 20 },
         },
         8: {
             requirementDescription: "Finish Beta I-IX (9)",
