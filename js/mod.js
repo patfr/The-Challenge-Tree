@@ -56,7 +56,7 @@ var displayThings = [
 ]
 
 function isEndgame() {
-	return hasUpgrade("beta", 15)
+	return false
 }
 
 var backgroundStyle = {
@@ -72,8 +72,8 @@ function fixOldSave(oldVersion){
 }
 
 let VERSION = {
-	num: "0.6",
-	name: "Beta",
+	num: "0.7",
+	name: "Gamma",
 }
 
 let winText = `Congratulations! You have completed the challenge that this tree presented before you, but for now...`

@@ -378,30 +378,29 @@ addLayer("alpha", {
         }
         player.alphaBase = new Decimal(0)
         player.alphaIII = new Decimal(0)
-        if (layer == "beta") {
-            let milestoneKeep = 0
-            if (hasMilestone("beta", 0)) milestoneKeep = 1
-            if (hasMilestone("beta", 2)) milestoneKeep = 2
-            if (hasMilestone("beta", 3)) milestoneKeep = 3
-            if (hasMilestone("beta", 4)) milestoneKeep = 5
-            if (hasMilestone("beta", 6)) milestoneKeep = 7
-            let upgradeKeep = 0
-            if (hasMilestone("beta", 1)) upgradeKeep = Math.floor(player.beta.times / 2)
+        
+        let milestoneKeep = 0
+        let upgradeKeep = 0
+        let alphaII = challengeCompletions(this.layer, 21)
+        let alphaIV = challengeCompletions(this.layer, 22)
+        let alphaV = challengeCompletions(this.layer, 31)
 
-            let alphaII = challengeCompletions(this.layer, 21)
-            let alphaIV = challengeCompletions(this.layer, 22)
-            let alphaV = challengeCompletions(this.layer, 31)
-
-            keep.push("milestones")
-            keep.push("upgrades")
-            layerDataReset(this.layer, keep)
-
-            player[this.layer].milestones = player[this.layer].milestones.slice(0, milestoneKeep)
-            player[this.layer].upgrades = player[this.layer].upgrades.slice(0, upgradeKeep)
-            if (hasMilestone("beta", 3)) player[this.layer].challenges[21] = Math.min(alphaII, player.beta.times)
-            if (hasMilestone("beta", 4)) player[this.layer].challenges[22] = Math.min(alphaIV, 1)
-            if (hasMilestone("beta", 5)) player[this.layer].challenges[31] = Math.min(alphaV, 1)
-        }
+        if (hasMilestone("beta", 0)) milestoneKeep = 1
+        if (hasMilestone("beta", 2)) milestoneKeep = 2
+        if (hasMilestone("beta", 3)) milestoneKeep = 3
+        if (hasMilestone("beta", 4)) milestoneKeep = 5
+        if (hasMilestone("beta", 6)) milestoneKeep = 7
+        if (hasMilestone("beta", 1)) upgradeKeep = Math.floor(player.beta.times / 2)
+        
+        keep.push("milestones")
+        keep.push("upgrades")
+        layerDataReset(this.layer, keep)
+        
+        player[this.layer].milestones = player[this.layer].milestones.slice(0, milestoneKeep)
+        player[this.layer].upgrades = player[this.layer].upgrades.slice(0, upgradeKeep)
+        if (hasMilestone("beta", 3)) player[this.layer].challenges[21] = Math.min(alphaII, player.beta.times)
+        if (hasMilestone("beta", 4)) player[this.layer].challenges[22] = Math.min(alphaIV, 1)
+        if (hasMilestone("beta", 5)) player[this.layer].challenges[31] = Math.min(alphaV, 1)
     },
 })
 
@@ -845,7 +844,126 @@ addLayer("beta", {
     },
     onPrestige() {
         player[this.layer].times += 1
-    }
+    },
+    doReset(layer) {
+        let keep = []
+        if (layer == this.layer) return
+        if (layer == "gamma") {
+            let resetKeep = 0
+            console.log(player.gamma.times)
+            if (player.gamma.times >= 1) resetKeep = player.gamma.times
+
+            keep.push("times")
+            layerDataReset(this.layer, keep)
+
+            player[this.layer].times = Math.min(player[this.layer].times, resetKeep)
+        }
+    },
+})
+
+function gammaHave() {
+    return [ "column", 
+        [
+            ["display-text", `
+                You have <h2 style='color:${tmp.gamma.color};text-shadow:0 0 10px ${tmp.gamma.color}'>${format(player.gamma.points)}</h2> γ, 
+                which is multiplying β gain by x${format(tmp.gamma.effect)}
+            `],
+            "blank",
+        ]
+    ]
+}
+
+addLayer("gamma", {
+    name: "Gamma",
+    symbol: "γ",
+    color: "#9124ff",
+    colorCan: "#741dcc",
+    resource: "γ",
+    type: "custom",
+    requires: new Decimal("5e3378"),
+    baseAmount() { return player.beta.points },
+    getResetGain() { return player.beta.points.gte(tmp[this.layer].requires) ? tmp[this.layer].directMult : new Decimal(0) },
+    getNextAt() { return new Decimal(0) },
+    canReset() { return player.beta.points.gte(tmp[this.layer].requires) },
+    prestigeButtonText() { return player.beta.points.gte(tmp[this.layer].requires) ? "Reset for 1 γ" : "Requires: 5e3378 β" },
+    directMult() {
+        let mult = new Decimal(1)
+        return mult
+    },
+    row: 2,
+    startData() { return {
+        unlocked: false,
+		points: new Decimal(0),
+        times: 0,
+    }},
+    shouldNotify() { return false },
+    prestigeNotify() { return false },
+    tabFormat: {
+        Challenges: {
+            content: [
+                gammaHave,
+                function() {
+                    return ["column", [
+                        "prestige-button",
+                        "blank",
+                        ["display-text", `You have ${format(player.beta.points)} β`],
+                    ]]
+                },
+            ],
+            shouldNotify() { return false },
+            prestigeNotify() { return false },
+        },
+        Milestones: {
+            content: [
+                gammaHave,
+                () => ["display-text", `You have done ${formatWhole(player.gamma.times)} resets`],
+                "blank",
+                "milestones",
+                ["blank", "50px"],
+            ],
+            shouldNotify() { return false },
+            prestigeNotify() { return false },
+        },
+        /*Upgrades: {
+            content: [
+                betaHave,
+                "upgrades",
+            ],
+            unlocked() { return hasMilestone("beta", 7) },
+            shouldNotify() {
+                return (canAffordUpgrade("beta", 11) && !hasUpgrade("beta", 11)) ||
+                    (canAffordUpgrade("beta", 12) && !hasUpgrade("beta", 12)) ||
+                    (canAffordUpgrade("beta", 13) && !hasUpgrade("beta", 13)) ||
+                    (canAffordUpgrade("beta", 14) && !hasUpgrade("beta", 14)) ||
+                    (canAffordUpgrade("beta", 15) && !hasUpgrade("beta", 15))
+            },
+            prestigeNotify() { return false },
+        },*/
+        /*Achievements: {
+            content: [
+                ["layer-proxy", ["a", [["achievements", [4]]]]]
+            ],
+            shouldNotify() { return false },
+            prestigeNotify() { return false },
+        },*/
+    },
+    milestones: {
+        0: {
+            requirementDescription: "1 Gamma reset (1)",
+            effectDescription: "Keep one Beta reset per reset on reset",
+            done() { return player[this.layer].times >= 1 },
+        },
+    },
+    effect() {
+        return player[this.layer].best.add(1).pow(2).max(1)
+    },
+    onPrestige() {
+        player[this.layer].times += 1
+    },
+    doReset(layer) {
+        let keep = []
+        if (layer == this.layer) return
+    },
 })
 
 addLayer("l", {
@@ -859,6 +977,11 @@ addLayer("l", {
             embedLayer: "beta",
             buttonStyle: { "border-color": "#ffffff", "border-width": "2px", "border-radius": "1px" },
             unlocked() { return hasMilestone("alpha", 6) || player.beta.unlocked },
+        },
+        Gamma: {
+            embedLayer: "gamma",
+            buttonStyle: { "border-color": "#ffffff", "border-width": "2px", "border-radius": "1px" },
+            unlocked() { return hasUpgrade("beta", 15) || player.gamma.unlocked },
         },
     },
     doReset() {},

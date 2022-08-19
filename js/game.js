@@ -186,7 +186,6 @@ function doReset(layer, force=false) {
 			gain =(tmp[layer].canBuyMax ? gain : 1)
 		} 
 
-
 		if (layers[layer].onPrestige)
 			run(layers[layer].onPrestige, layers[layer], gain)
 		
@@ -204,7 +203,6 @@ function doReset(layer, force=false) {
 					if (!player[lrs[lr]].unlocked) player[lrs[lr]].unlockOrder++
 			}
 		}
-	
 	}
 
 	if (run(layers[layer].resetsNothing, layers[layer])) return
