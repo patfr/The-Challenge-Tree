@@ -1,72 +1,127 @@
+.upgCol:has(div .vers) {
+    width: 90%;
+    background: var(--changelogBackground);
+    border-radius: 8px;
+    margin-bottom: 50px;
+}
+
+.upgCol:has(div .vers)>div:has(span>div) {
+    padding: 10px 10px 0 10px;
+}
+
+.upgCol:has(div .vers)>div>span>div {
+    background: var(--changelogColor);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.upgCol:has(div .vers)>div>span>div:has(h2) {
+    background: var(--changelogColor);
+    padding: 10px;
+    border-radius: 8px 8px 0 0;
+}
+
+.versions {
+    margin: 10px;
+}
+
+.vers {
+    margin-bottom: 10px;
+}
+
+.vers:only-of-type {
+    margin-bottom: 0;
+}
+
+.vers>div {
+    background: var(--changelogColor);
+    border-radius: 8px 8px 0 0;
+    padding: 10px;
+}
+
 details {
-    margin: 24px 0;
+    margin: 0;
+    background: var(--changelogColor);
+    border-radius: 0 0 8px 8px;
+}
+
+details:not([open]):last-of-type>summary {
+    border-radius: 0 0 8px 8px;
 }
 
 details>summary {
     cursor: pointer;
-    margin-bottom: 10px;
-    margin-left: -18px;
+    padding: 10px;
+    text-align: left;
+    background: var(--changelogLight);
 }
 
-details>ul {
-    margin: 5px 0;
+ul {
     padding: 5px 5px 5px 15px;
+    background: var(--changelogLog);
     list-style: inside;
 }
 
-details>ul:first-of-type {
+ul:first-of-type {
     margin-bottom: 0;
     padding-bottom: 2px;
 }
 
-details>ul:last-of-type {
+ul:last-of-type {
     margin-top: 0;
     padding-top: 2px;
 }
 
-details>ul:only-of-type {
-    margin: 5px 0;
+ul:only-of-type {
     padding: 5px 5px 5px 15px;
 }
 
-details>ul>li {
+*:last-of-type>ul:last-of-type {
+    border-radius: 0 0 8px 8px;
+}
+
+ul>li {
     margin: 8px 0;
     right: 0px;
     list-style-position: inside;
     text-align: left;
 }
 
-details>ul>li::before {
+ul>li::before {
     padding: 6px 8px;
     margin-right: 8px;
 }
 
-details>ul>li:first-of-type {
+ul>li:first-of-type {
     margin: 8px 0 6px 0;
 }
 
-details>ul>li:first-of-type::before {
+ul>li:first-of-type::before {
     border-radius: 4px 4px 0 0;
     padding: 2px 8px 6px 8px;
 }
 
-details>ul>li:last-of-type {
+ul>li:last-of-type {
     margin: 6px 0 8px 0;
 }
 
-details>ul>li:last-of-type::before {
+ul>li:last-of-type::before {
     border-radius: 0 0 4px 4px;
     padding: 6px 8px 2px 8px;
 }
 
 
-details>ul>li:only-of-type {
+ul>li:only-of-type {
     margin: 8px 0;
 }
 
-details>ul>li:only-of-type::before {
+ul>li:only-of-type::before {
     border-radius: 4px;
     padding: 2px 8px;
+}
+
+li>a:hover {
+    text-shadow: 0 0 5px white;
 }
 
 li.Endgame::before {

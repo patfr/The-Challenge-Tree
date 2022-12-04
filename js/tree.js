@@ -16,11 +16,11 @@ addLayer("tree-tab", {
         Layers: {
             embedLayer: "l",
             buttonStyle: { "border-color": "#43e06d" },
-        },/*
-        Help: {
-            embedLayer: "help",
-            buttonStyle: { "border-color": "#bad1f5" },
-        }*/
+        },
+        Achievements: {
+            embedLayer: "a",
+            buttonStyle: { "border-color": "#fcf93f" },
+        },
     },
     previousTab: "",
     leftTab: true,

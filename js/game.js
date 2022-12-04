@@ -186,7 +186,6 @@ function doReset(layer, force=false) {
 			gain =(tmp[layer].canBuyMax ? gain : 1)
 		} 
 
-
 		if (layers[layer].onPrestige)
 			run(layers[layer].onPrestige, layers[layer], gain)
 		
@@ -204,7 +203,6 @@ function doReset(layer, force=false) {
 					if (!player[lrs[lr]].unlocked) player[lrs[lr]].unlockOrder++
 			}
 		}
-	
 	}
 
 	if (run(layers[layer].resetsNothing, layers[layer])) return
@@ -264,6 +262,30 @@ function startChallenge(layer, x) {
 function canCompleteChallenge(layer, x)
 {
 	if (x != player[layer].activeChallenge) return
+	let challenge = tmp[layer].challenges[x]
+	if (challenge.canComplete !== undefined) return challenge.canComplete
+
+	if (challenge.currencyInternalName){
+		let name = challenge.currencyInternalName
+		if (challenge.currencyLocation){
+			return !(challenge.currencyLocation[name].lt(challenge.goal)) 
+		}
+		else if (challenge.currencyLayer){
+			let lr = challenge.currencyLayer
+			return !(player[lr][name].lt(challenge.goal)) 
+		}
+		else {
+			return !(player[name].lt(challenge.goal))
+		}
+	}
+	else {
+		return !(player.points.lt(challenge.goal))
+	}
+
+}
+
+function canCompleteChallengeOutside(layer, x)
+{
 	let challenge = tmp[layer].challenges[x]
 	if (challenge.canComplete !== undefined) return challenge.canComplete
 
