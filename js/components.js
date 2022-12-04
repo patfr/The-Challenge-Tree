@@ -456,11 +456,11 @@ function loadVue() {
 		},
 		template: `
 		<div v-if="tmp[layer].bars && tmp[layer].bars[data].unlocked" v-bind:style="{'position': 'relative'}"><div v-bind:style="[tmp[layer].bars[data].style, style.dims, {'display': 'table'}]">
-			<div class = "overlayTextContainer barBorder" v-bind:style="[tmp[layer].bars[data].borderStyle, style.dims]">
+			<div class = "overlayTextContainer barBorder" v-bind:style="[{'border': '0 solid #000000'},style.dims]">
 				<span class = "overlayText" v-bind:style="[tmp[layer].bars[data].style, tmp[layer].bars[data].textStyle]" v-html="run(layers[layer].bars[data].display, layers[layer].bars[data])"></span>
 			</div>
 			<div class ="barBG barBorder" v-bind:style="[tmp[layer].bars[data].style, tmp[layer].bars[data].baseStyle, tmp[layer].bars[data].borderStyle,  style.dims]">
-				<div class ="fill" v-bind:style="[tmp[layer].bars[data].style, tmp[layer].bars[data].fillStyle, style.fillDims]"></div>
+				<div class ="fill" v-bind:style="[tmp[layer].bars[data].style, style.fillDims, tmp[layer].bars[data].fillStyle]"></div>
 			</div>
 		</div></div>
 		`
@@ -601,13 +601,22 @@ function loadVue() {
 	`
 	})
 
+	Vue.component('versions', {
+		props: ['layer', 'data'],
+		template: `
+			<div class="versions">
+				<version v-for="(version, iv) in data" :data="version"></version>
+			</div>
+		`
+	})
+
 	Vue.component('version', {
 		props: ['layer', 'data'],
 		template: `
-			<div>
-				<h2 :style="{color: data.color}" v-html="data.name"></h2>
-				<details v-for="(version, iv) in data.items" :open="data.open">
-					<summary><h2 :style="{color: data.color}" v-html="version.summary"></h2></summary>
+			<div class="vers">
+				<div :id="data.id"><h2 :style="{color: data.color}" v-html="data.name"></h2></div>
+				<details v-for="(version, iv) in data.items" :open="version.open">
+					<summary class="instant"><h2 :style="{color: data.color}" v-html="version.summary"></h2></summary>
 					<ul v-for="(category, ic) in version.items">
 						<li v-for="(action, ia) in category" :class="action.type" v-html="action.description"></li>
 					</ul>

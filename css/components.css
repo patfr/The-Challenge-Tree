@@ -7,42 +7,6 @@
 	overflow: visible;
 }
 
-.upgTable>.upgRow:first-of-type>.upgAlign:first-of-type>.upg {
-	border-radius: 8px 0 0 0;
-}
-
-.upgTable>.upgRow:first-of-type>.upgAlign:last-of-type>.upg {
-	border-radius: 0 8px 0 0;
-}
-
-.upgTable>.upgRow:first-of-type>.upgAlign:only-of-type>.upg {
-	border-radius: 8px;
-}
-
-.upgTable>.upgRow:last-of-type>.upgAlign:first-of-type>.upg {
-	border-radius: 0 0 0 8px;
-}
-
-.upgTable>.upgRow:last-of-type>.upgAlign:last-of-type>.upg {
-	border-radius: 0 0 8px 0;
-}
-
-.upgTable>.upgRow:last-of-type>.upgAlign:only-of-type>.upg {
-	border-radius: 8px;
-}
-
-.upgTable>.upgRow:only-of-type>.upgAlign:first-of-type>.upg {
-	border-radius: 8px 0 0 8px;
-}
-
-.upgTable>.upgRow:only-of-type>.upgAlign:last-of-type>.upg {
-	border-radius: 0 8px 8px 0;
-}
-
-.upgTable>.upgRow:only-of-type>.upgAlign:only-of-type>.upg {
-	border-radius: 8px;
-}
-
 .achievement {
 	height: 90px;
 	width: 90px;
@@ -51,42 +15,6 @@
 	font-size: 10px;
 	color: white;
 	text-shadow: 0 0 2px #000000;
-}
-
-.upgTable>.upgRow:first-of-type>.upgAlign:first-of-type>.achievement {
-	border-radius: 8px 0 0 0;
-}
-
-.upgTable>.upgRow:first-of-type>.upgAlign:last-of-type>.achievement {
-	border-radius: 0 8px 0 0;
-}
-
-.upgTable>.upgRow:first-of-type>.upgAlign:only-of-type>.achievement {
-	border-radius: 8px;
-}
-
-.upgTable>.upgRow:last-of-type>.upgAlign:first-of-type>.achievement {
-	border-radius: 0 0 0 8px;
-}
-
-.upgTable>.upgRow:last-of-type>.upgAlign:last-of-type>.achievement {
-	border-radius: 0 0 8px 0;
-}
-
-.upgTable>.upgRow:last-of-type>.upgAlign:only-of-type>.achievement {
-	border-radius: 8px;
-}
-
-.upgTable>.upgRow:only-of-type>.upgAlign:first-of-type>.achievement {
-	border-radius: 8px 0 0 8px;
-}
-
-.upgTable>.upgRow:only-of-type>.upgAlign:last-of-type>.achievement {
-	border-radius: 0 8px 8px 0;
-}
-
-.upgTable>.upgRow:only-of-type>.upgAlign:only-of-type>.achievement {
-	border-radius: 8px;
 }
 
 .achievement:hover {
@@ -120,18 +48,6 @@
 	background-color: var(--layer);
 }
 
-table>tr:first-of-type>.mile {
-	border-radius: 8px 8px 0 0;
-}
-
-table>tr:last-of-type>.mile {
-	border-radius: 0 0 8px 8px;
-}
-
-table>tr:only-of-type>.mile {
-	border-radius: 8px;
-}
-
 .challenge {
 	background-color: #bf8f8f;
 	position: relative;
@@ -142,42 +58,6 @@ table>tr:only-of-type>.mile {
 	height: fit-content;
 	padding-bottom: 10px;
 	font-size: 15px;
-}
-
-.upgTable>.upgRow:first-of-type>.challenge:first-of-type {
-	border-radius: 8px 0 0 0;
-}
-
-.upgTable>.upgRow:first-of-type>.challenge:last-of-type {
-	border-radius: 0 8px 0 0;
-}
-
-.upgTable>.upgRow:first-of-type>.challenge:only-of-type {
-	border-radius: 8px;
-}
-
-.upgTable>.upgRow:last-of-type>.challenge:first-of-type {
-	border-radius: 0 0 0 8px;
-}
-
-.upgTable>.upgRow:last-of-type>.challenge:last-of-type {
-	border-radius: 0 0 8px 0;
-}
-
-.upgTable>.upgRow:last-of-type>.challenge:only-of-type {
-	border-radius: 8px;
-}
-
-.upgTable>.upgRow:only-of-type>.challenge:first-of-type {
-	border-radius: 8px 0 0 8px;
-}
-
-.upgTable>.upgRow:only-of-type>.challenge:last-of-type {
-	border-radius: 0 8px 8px 0;
-}
-
-.upgTable>.upgRow:only-of-type>.challenge:only-of-type {
-	border-radius: 8px;
 }
 
 .challenge.done {

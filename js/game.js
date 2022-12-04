@@ -284,6 +284,30 @@ function canCompleteChallenge(layer, x)
 
 }
 
+function canCompleteChallengeOutside(layer, x)
+{
+	let challenge = tmp[layer].challenges[x]
+	if (challenge.canComplete !== undefined) return challenge.canComplete
+
+	if (challenge.currencyInternalName){
+		let name = challenge.currencyInternalName
+		if (challenge.currencyLocation){
+			return !(challenge.currencyLocation[name].lt(challenge.goal)) 
+		}
+		else if (challenge.currencyLayer){
+			let lr = challenge.currencyLayer
+			return !(player[lr][name].lt(challenge.goal)) 
+		}
+		else {
+			return !(player[name].lt(challenge.goal))
+		}
+	}
+	else {
+		return !(player.points.lt(challenge.goal))
+	}
+
+}
+
 function completeChallenge(layer, x) {
 	var x = player[layer].activeChallenge
 	if (!x) return
