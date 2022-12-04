@@ -31,6 +31,10 @@ h1, h2, h3, b, input {
 	box-shadow: 0 0 20px var(--points)
 }
 
+.buyable.can:hover {
+	transform: scale(1, 1);
+}
+
 .bought {
 	background-color: var(--layer);
 	cursor: default;

@@ -57,7 +57,7 @@ var displayThings = [
 ]
 
 function isEndgame() {
-	return player.gamma.times >= 10
+	return player.gamma.alpha.points.gte(3000) && player.gamma.beta.points.gte(3000) && player.gamma.points.gte(20000)
 }
 
 var backgroundStyle = {
@@ -69,13 +69,23 @@ function maxTickLength() {
 }
 
 function fixOldSave(oldVersion){
-	if (oldVersion != "v0.6") {
-		player.a.achievements = []
+	switch(oldVersion) {
+		case "v0.6":
+		case "v0.5":
+		case "v0.4":
+		case "v0.3.1":
+		case "v0.3":
+		case "v0.2":
+		case "v0.1":
+			player.a.achievements = []
+			break
+		default:
+			break
 	}
 }
 
 let VERSION = {
-	num: "0.7",
+	num: "0.8",
 	name: "Gamma",
 }
 
