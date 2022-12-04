@@ -3,8 +3,8 @@ let changelog = [
 	["display-text", 
         "<div><h2 style='color: #f7492a'>Goto</h2></div>" +
         "<ul>" +
-            "<li><a style='color: #fcf93f' href='#endgameChapter'>Endgame</a> <span style='color:#afafaf'>v0.1 - v0.7</span></li>" +
-            "<li><a style='color: #a65af2' href='#gammaChapter'>Gamma</a> <span style='color:#afafaf'>v0.7</span></li>" +
+            "<li><a style='color: #fcf93f' href='#endgameChapter'>Endgame</a> <span style='color:#afafaf'>v0.1 - v0.8</span></li>" +
+            "<li><a style='color: #a65af2' href='#gammaChapter'>Gamma</a> <span style='color:#afafaf'>v0.7 - v0.8</span></li>" +
             "<li><a style='color: #7da6ff' href='#betaChapter'>Beta</a> <span style='color:#afafaf'>v0.5 - v0.6</span></li>" +
             "<li><a style='color: #f7922d' href='#alphaChapter'>Alpha</a> <span style='color:#afafaf'>v0.1 - v0.4</span></li>" +
         "</ul>"
@@ -13,6 +13,9 @@ let changelog = [
 
         // Endgame
         { color: "#fcf93f", name: "Endgame", id: "endgameChapter", items: [
+            { open: false, summary: "v0.8", items: [[
+                {type: "Endgame", description: "3,000 αψ, 3,000 βψ and 30,000 γ"},
+            ]]},
             { open: false, summary: "v0.7", items: [[
                 {type: "Endgame", description: "10 Gamma resets"},
             ]]},
@@ -38,7 +41,14 @@ let changelog = [
 
         // Beta
         { color: "#a65af2", name: "Gamma", id: "gammaChapter", items: [
-            { open: true, summary: "v0.7", items: [[
+            { open: true, summary: "v0.8", items: [[
+                {type: "Added", description: "Two milestones"},
+                {type: "Added", description: "Two upgrades"},
+                {type: "Added", description: "Two challenges"},
+                {type: "Added", description: "Three bars"},
+                {type: "Added", description: "Three buyables"},
+            ]]},
+            { open: false, summary: "v0.7", items: [[
                 {type: "Added", description: "Files for each layer"},
                 {type: "Added", description: "Info menu for all layers"},
                 {type: "Added", description: "5 Rows of achievements"},
