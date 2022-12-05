@@ -70,13 +70,13 @@ function maxTickLength() {
 
 function fixOldSave(oldVersion){
 	switch(oldVersion) {
-		case "v0.6":
-		case "v0.5":
-		case "v0.4":
-		case "v0.3.1":
-		case "v0.3":
-		case "v0.2":
-		case "v0.1":
+		case "0.6":
+		case "0.5":
+		case "0.4":
+		case "0.3.1":
+		case "0.3":
+		case "0.2":
+		case "0.1":
 			player.a.achievements = []
 			break
 		default:

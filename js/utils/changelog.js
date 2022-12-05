@@ -3,8 +3,8 @@ let changelog = [
 	["display-text", 
         "<div><h2 style='color: #f7492a'>Goto</h2></div>" +
         "<ul>" +
-            "<li><a style='color: #fcf93f' href='#endgameChapter'>Endgame</a> <span style='color:#afafaf'>v0.1 - v0.8</span></li>" +
-            "<li><a style='color: #a65af2' href='#gammaChapter'>Gamma</a> <span style='color:#afafaf'>v0.7 - v0.8</span></li>" +
+            "<li><a style='color: #fcf93f' href='#endgameChapter'>Endgame</a> <span style='color:#afafaf'>v0.1 - v0.8.1</span></li>" +
+            "<li><a style='color: #a65af2' href='#gammaChapter'>Gamma</a> <span style='color:#afafaf'>v0.7 - v0.8.1</span></li>" +
             "<li><a style='color: #7da6ff' href='#betaChapter'>Beta</a> <span style='color:#afafaf'>v0.5 - v0.6</span></li>" +
             "<li><a style='color: #f7922d' href='#alphaChapter'>Alpha</a> <span style='color:#afafaf'>v0.1 - v0.4</span></li>" +
         "</ul>"
@@ -41,7 +41,11 @@ let changelog = [
 
         // Beta
         { color: "#a65af2", name: "Gamma", id: "gammaChapter", items: [
-            { open: true, summary: "v0.8", items: [[
+            { open: true, summary: "v0.8.1", items: [[
+                {type: "Fixed", description: "Achievement having the wrong name"},
+                {type: "Fixed", description: "Achievements after importing pre v0.7 saves"},
+            ]]},
+            { open: false, summary: "v0.8", items: [[
                 {type: "Added", description: "Two milestones"},
                 {type: "Added", description: "Two upgrades"},
                 {type: "Added", description: "Two challenges"},
