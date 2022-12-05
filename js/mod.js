@@ -85,7 +85,7 @@ function fixOldSave(oldVersion){
 }
 
 let VERSION = {
-	num: "0.8",
+	num: "0.8.1",
 	name: "Gamma",
 }
 
